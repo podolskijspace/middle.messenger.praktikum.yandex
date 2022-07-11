@@ -1,0 +1,25 @@
+{
+  "name": "messenger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel index.hbs",
+    "build": "parcel build index.hbs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/podolskijspace/messenger.git"
+  },
+  "author": "podolskijspace",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/podolskijspace/messenger/issues"
+  },
+  "homepage": "https://github.com/podolskijspace/messenger#readme",
+  "devDependencies": {
+    "@anikin/parcel-transformer-handlebars": "^1.0.9",
+    "parcel": "^2.6.2"
+  },
+  "dependencies": {}
+}
