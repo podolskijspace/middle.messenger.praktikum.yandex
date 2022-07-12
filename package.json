@@ -2,7 +2,7 @@
   "name": "messenger",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": false,
   "scripts": {
     "dev": "parcel index.hbs",
     "build": "parcel build index.hbs"
