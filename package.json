@@ -4,8 +4,8 @@
   "description": "",
   "main": false,
   "scripts": {
-    "dev": "parcel index.hbs",
-    "build": "parcel build index.hbs"
+    "dev": "parcel ./pages/*.hbs",
+    "build": "parcel build ./pages/*.hbs"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/podolskijspace/messenger#readme",
   "devDependencies": {
     "@anikin/parcel-transformer-handlebars": "^1.0.9",
+    "@parcel/transformer-sass": "^2.6.2",
     "parcel": "^2.6.2"
   },
   "dependencies": {}
