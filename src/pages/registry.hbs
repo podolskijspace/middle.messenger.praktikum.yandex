@@ -1,13 +1,16 @@
 ---
-pageName: "Авторазиация" 
+pageName: "Регистрация" 
 formMod: "auth__form"
 formItems: [
-  {name: 'name', text: 'Имя', type: 'text'},
-  {name: 'password', text: 'Пароль', password: true, type: 'password'}
+  {name: 'first_name', text: 'Имя', type: 'text'},
+  {name: 'second_name', text: 'Фамилия', type: 'text'},
+  {name: 'login', text: 'Логин', type: 'text'},
+  {name: 'email', text: 'Почта', type: 'email'},
+  {name: 'password', text: 'Пароль', type: 'password'},
+  {name: 'repeatPassword', text: 'Повторите пароль', type: 'password'},
 ]
 formButtons: [
-  {href: 'registry.hbs', text: 'Зарегистрироваться'},
-  {href: 'index.hbs', text: 'Войти'},
+  {href: 'auth.hbs', text: 'Зарегистрироваться'},
 ]
 ---
 
@@ -18,7 +21,7 @@ formButtons: [
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{pageName}}</title>
-  <script src="../src/index.js" type="module"></script>
+  <script src="../scripts/index.js" type="module"></script>
   <link rel="stylesheet" href="../styles/index.scss">
 </head>
 <body>
@@ -30,7 +33,7 @@ formButtons: [
           {{#each formItems}}
             <div class="form__item">
               <label class="form__label" for="{{this.name}}">{{this.text}}</label>
-              <input class="form__input auth__input" type="{{this.type}}" name="{{this.name}}">
+              <input class="form__input auth__input" type={{this.type}}" name="{{this.name}}">
               {{#if this.password}}
                 <a class="auth__forgetPass" href="forget-password.hbs">Восстановить пароль</a>
               {{/if}}

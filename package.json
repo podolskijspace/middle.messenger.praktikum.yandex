@@ -2,10 +2,10 @@
   "name": "messenger",
   "version": "1.0.0",
   "description": "",
-  "main": false,
+  "main": "src/script/index.js",
   "scripts": {
-    "dev": "parcel ./pages/*.hbs",
-    "build": "parcel build ./pages/*.hbs"
+    "dev": "parcel ./src/index.html",
+    "build": "parcel build ./src/index.html"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/podolskijspace/messenger#readme",
   "devDependencies": {
-    "@anikin/parcel-transformer-handlebars": "^1.0.9",
     "@parcel/transformer-sass": "^2.6.2",
-    "parcel": "^2.6.2"
+    "express": "^4.18.1",
+    "handlebars": "^4.7.7",
+    "parcel": "^2.6.2",
+    "parcel-transformer-hbs": "^1.0.4"
   },
   "dependencies": {}
 }
