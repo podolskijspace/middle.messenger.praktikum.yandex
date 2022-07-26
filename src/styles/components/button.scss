@@ -1,3 +1,5 @@
+$mainColor: rgb(98, 233, 98);
+
 .button {
   padding: 10px;
   background: #ada;
@@ -9,7 +11,6 @@
   transition: background-color .5s;
 
   &:hover {
-    background: rgb(98, 233, 98);
-
+    background: #{$mainColor};
   }
 }

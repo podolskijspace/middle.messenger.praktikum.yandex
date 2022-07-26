@@ -1,6 +1,8 @@
+$chatBG: #00877da3;
+
 .chat {
   flex: 1;
-  background: #00877da3;
+  background: #{$chatBG};
   padding: 10px;
 
 

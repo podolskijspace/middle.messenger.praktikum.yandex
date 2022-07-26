@@ -1,3 +1,6 @@
+$chatHover: #7784ef4a;
+$chatPick: #7784efb5;
+
 .chatSM {
   $self: &;
 
@@ -9,11 +12,11 @@
     cursor: pointer;
 
     &:hover {
-      background: #7784ef4a;
+      background: #{$chatHover};
     }
 
     #{$self}.active & {
-      background: #7784efb5;
+      background: #{$chatPick};
       cursor: default;
     }
   }
