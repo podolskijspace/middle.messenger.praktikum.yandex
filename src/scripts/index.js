@@ -5,9 +5,6 @@ import {authPage} from "./pages/auth";
 import {forgetPasswordPage} from "./pages/forgetPassword";
 import {registryPage} from "./pages/registry";
 
-
-console.log('scripts working');
-
 switch(window.location.pathname) {
   case "/":
     root.innerHTML = mainPage
