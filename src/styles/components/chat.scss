@@ -1,8 +1,8 @@
-$chatBG: #00877da3;
+@import "../vars";
 
 .chat {
   flex: 1;
-  background: #{$chatBG};
+  background: $chatBG;
   padding: 10px;
 
 

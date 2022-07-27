@@ -1,5 +1,4 @@
-$chatHover: #7784ef4a;
-$chatPick: #7784efb5;
+@import "../vars";
 
 .chatSM {
   $self: &;
@@ -12,11 +11,11 @@ $chatPick: #7784efb5;
     cursor: pointer;
 
     &:hover {
-      background: #{$chatHover};
+      background: $chatHover;
     }
 
     #{$self}.active & {
-      background: #{$chatPick};
+      background: $chatPick;
       cursor: default;
     }
   }
