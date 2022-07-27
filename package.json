@@ -2,15 +2,21 @@
   "name": "messenger",
   "version": "1.0.0",
   "description": "",
-  "main": "src/script/index.js",
-  "scripts": {
-    "dev": "parcel ./src/index.html --port 3000",
-    "build": "parcel build ./src/index.html",
-    "server": "node server.js"
+  "main": "./src/index.html",
+  "targets": {
+    "default": {
+      "source": "./src/index.html",
+      "sourceMap": true,
+      "includeNodeModules": [
+        "handlebars"
+      ],
+      "context": "browser"
+    }
   },
-  "engines" : {
-    "npm" : "6.14.15",
-    "node" : "14.18.2"
+  "scripts": {
+    "dev": "parcel --port 3000",
+    "build": "parcel build" ,
+    "server": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -25,9 +31,11 @@
   "devDependencies": {
     "@parcel/transformer-sass": "2.6.2",
     "express": "4.18.1",
-    "handlebars": "4.7.7",
     "parcel": "2.6.2",
     "parcel-transformer-hbs": "1.0.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "handlebars": "4.7.7"
+
+  }
 }
