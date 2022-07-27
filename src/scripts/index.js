@@ -1,12 +1,12 @@
-import {mainPage} from "./pages/main"
-import {notFoundPage} from "./pages/404"
-import {errorPage} from "./pages/500"
-import {authPage} from "./pages/auth"
-import {forgetPasswordPage} from "./pages/forgetPassword"
-import {registryPage} from "./pages/registry"
+import {mainPage} from "./pages/main";
+import {notFoundPage} from "./pages/404";
+import {errorPage} from "./pages/500";
+import {authPage} from "./pages/auth";
+import {forgetPasswordPage} from "./pages/forgetPassword";
+import {registryPage} from "./pages/registry";
 
 
-console.log('scripts working')
+console.log('scripts working');
 
 switch(window.location.pathname) {
   case "/":
