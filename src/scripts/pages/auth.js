@@ -30,7 +30,7 @@ const source = `
 const root = document.querySelector('#root');
 const template = Handlebars.compile(source)
 
-data = {
+const data = {
   "formMod": "auth__form",
   "formItems": [
     {"name": 'name', "text": 'Имя', "type": 'text'},
