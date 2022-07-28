@@ -1,0 +1,49 @@
+@import "../vars";
+
+.chatSM {
+  $self: &;
+
+  &__wrapper {
+    height: 74px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+
+    &:hover {
+      background: $chatHover;
+    }
+
+    #{$self}.active & {
+      background: $chatPick;
+      cursor: default;
+    }
+  }
+
+  &__avatar {
+    margin-right: 10px;
+
+    div {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #000;
+    }
+  }
+
+  &__info {
+    font-size: 16px;
+  }
+
+  &__name {
+    margin-bottom: 5px;
+    font-weight: 700;
+  }
+
+  &__last-message {
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    display: -webkit-box;
+  }
+}
