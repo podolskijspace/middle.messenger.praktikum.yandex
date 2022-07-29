@@ -1,7 +1,7 @@
 
 import Handlebars from "handlebars";
 
-const source = `
+const source:string = `
 <section class="auth">
   <div class="container">
     <div class="auth__wrapper">
@@ -12,13 +12,13 @@ const source = `
             <label class="form__label" for="{{this.name}}">{{this.text}}</label>
             <input class="form__input auth__input" type={{this.type}}" name="{{this.name}}">
             {{#if this.password}}
-              <a class="auth__forgetPass" href="forget-password.hbs">Восстановить пароль</a>
+              <a class="auth__forgetPass  link" href="forget-password">Восстановить пароль</a>
             {{/if}}
           </div>
         {{/each}}
         <div class="form__buttons">
           {{#each formButtons}}
-            <a class="form__button button" href="{{this.href}}">{{this.text}}</a>
+            <a class="form__button button link" href="{{this.href}}">{{this.text}}</a>
           {{/each}}
         </div> 
       </form>
@@ -27,16 +27,15 @@ const source = `
 </section>`
 
 
-const root = document.querySelector('#root');
 const template = Handlebars.compile(source)
 
-const data = {
-  "formMod": "auth__form",
-  "formItems": [
-    {"name": 'email', "text": 'Почта', "type": 'email'},
+const data:Object = {
+  formMod: "auth__form",
+  formItems: [
+    {name: 'email', text: 'Почта', type: 'email'},
   ],
-  "formButtons": [
-    {"href": 'auth.hbs', "text": 'Восстановить пароль'},
+  formButtons: [
+    {href: 'auth', text: 'Восстановить пароль'},
   ]
 }
 

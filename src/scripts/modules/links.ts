@@ -1,0 +1,21 @@
+import { render } from "./render";
+
+const links = ():void => {
+  const links: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('.link');
+
+  links.forEach(link => {
+    if (!link.classList.contains('active')) {
+      link.addEventListener('click', linkWorker);
+      link.classList.add('active')
+    }
+  })
+}
+
+// TODO: Заменить на нормальный тип
+const linkWorker = (e:any):void => {
+  e.preventDefault();
+  window.history.pushState({}, 'new', e.target.href)
+  render()
+}
+
+export {links};

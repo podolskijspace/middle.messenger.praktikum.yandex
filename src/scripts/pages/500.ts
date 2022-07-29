@@ -1,23 +1,22 @@
 
 import Handlebars from "handlebars";
 
-const source = `
+const source:string = `
 <div class="error-page">
   <div class="error-page__num">
-    404
+    500
   </div>
   <div class="error-page__text">
     Страница не найдена
   </div>
-  <button class="button">
+  <a class="button link" href="/">
     Вернуться на главную
-  </button>
+  </a>
 </div>`
 
 
-const root = document.querySelector('#root');
 const template = Handlebars.compile(source)
 
-const notFoundPage = template()
+const errorPage = template(null)
 
-export {notFoundPage}
+export {errorPage}

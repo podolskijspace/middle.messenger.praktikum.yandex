@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
 
-const source = `
+const source:string = `
 <section class="messenger">
   <div class="messenger__left">
     <div class="messenger__top">
@@ -99,13 +99,12 @@ const source = `
 `
 
 
-const root = document.querySelector('#root');
 const template = Handlebars.compile(source)
 
-const data = {
-  "chats":[{"name": "Артем Иванов", "active": true, "text": "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},],
-  "formItems":[{"name": 'first_name', "text": 'Имя', "type": 'text'}],
-  "formButtons": [{"text": 'Сохранить'}]
+const data:Object = {
+  chats:[{name: "Артем Иванов", active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},],
+  formItems:[{name: 'first_name', text: 'Имя', type: 'text'}],
+  formButtons: [{text: 'Сохранить'}]
 }
 
 const mainPage = template(data)
