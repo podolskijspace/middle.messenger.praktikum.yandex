@@ -1,4 +1,3 @@
-
 import Handlebars from "handlebars";
 
 const source:string = `
