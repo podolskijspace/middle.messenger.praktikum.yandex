@@ -13,16 +13,16 @@ const source:string = `
     </div>
     <ul class="chats">
       {{#each chats}}
-        <li class="chatSM {{#if this.active}}active{{/if}}">
-          <div class="chatSM__wrapper">
-            <div class="chatSM__avatar">
+        <li class="chat-small {{#if this.active}}active{{/if}}">
+          <div class="chat-small__wrapper">
+            <div class="chat-small__avatar">
               <div></div>
             </div>
-            <div class="chatSM__info">
-              <div class="chatSM__name">
+            <div class="chat-small__info">
+              <div class="chat-small__name">
                 {{this.name}}
               </div>
-              <div class="chatSM__last-message">
+              <div class="chat-small__last-message">
                 {{this.text}}
               </div> 
             </div>

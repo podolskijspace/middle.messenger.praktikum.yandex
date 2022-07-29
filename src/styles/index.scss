@@ -1,18 +1,14 @@
-@import url("./components/form");
-@import url("./components/button");
-@import url("./components/chatSM");
-@import url("./components/chat");
-@import url("./components/write");
-@import url("./components/write-message");
-@import url("./components/search");
-@import url("./components/chat-info");
-@import url("./components/modal");
-
-
-@import url("./pages/auth");
-@import url("./pages/messenger");
-@import url("./pages/error-page");
-
-
+@import "./components/form";
+@import "./components/button";
+@import "./components/chat-small";
+@import "./components/chat";
+@import "./components/write";
+@import "./components/write-message";
+@import "./components/search";
+@import "./components/chat-info";
+@import "./components/modal";
+@import "./pages/auth";
+@import "./pages/messenger";
+@import "./pages/error-page";
 @import "container";
 @import "reset";

@@ -2,9 +2,8 @@
 
 .chat {
   flex: 1;
-  background: $chatBG;
+  background: $chat-background;
   padding: 10px;
-
 
   &__list {
     height: 100%;
@@ -27,7 +26,6 @@
     font-weight: 700;
     margin-bottom: 5px;
   }
-
 
   &__time {
     position: absolute;
