@@ -12,10 +12,12 @@ const links = ():void => {
 }
 
 // TODO: Заменить на нормальный тип
-const linkWorker = (e:any):void => {
+const linkWorker = (e:MouseEvent):void => {
   e.preventDefault();
-  window.history.pushState({}, 'new', e.target.href)
-  render()
+  if (e.target instanceof HTMLAnchorElement) {
+    window.history.pushState({}, 'new', e.target.href)
+    render()
+  }
 }
 
 export {links};
