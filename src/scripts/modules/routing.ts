@@ -1,4 +1,4 @@
-import {mainPage} from "../pages/main";
+import {Main} from "../pages/Main/";
 import {notFoundPage} from "../pages/404";
 import {errorPage} from "../pages/500";
 import {authPage} from "../pages/auth";
@@ -12,7 +12,7 @@ const routing = ():void => {
   if (root) {
     switch(window.location.pathname) {
       case "/":
-        root.innerHTML = mainPage
+        root.append(Main())
         break;
       case "/forget-password":
         root.innerHTML = forgetPasswordPage
