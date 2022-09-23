@@ -8,7 +8,6 @@ import {registryPage} from "../pages/registry";
 const root:HTMLDivElement | null = document.querySelector('#root');
 
 const routing = ():void => {
-  
   if (root) {
     switch(window.location.pathname) {
       case "/":

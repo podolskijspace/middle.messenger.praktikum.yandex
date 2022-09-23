@@ -1,9 +1,7 @@
 // import { EventBus, IEventBus } from "./EventBus";
 // import Handlebars from "handlebars";
 
-// interface IBlock {
-//   render(): string;
-// }
+
 
 // class Block implements IBlock{
 //   static EVENTS:Record<string, string> = {
@@ -43,19 +41,35 @@
 
 // export {Block};
 
+interface IBlock {
+  // render(): string;
+  init(): void;
+  _meta: {
+    tagName: string
+  };
+  props: object,
+  eventBus: any,
+  _registerEvents(eventBus:any): void;
+}
+
 
 import { EventBus } from "./eventBus";
+import Handlebars from "handlebars";
 
 // Нельзя создавать экземпляр данного класса
-class Block {
+class Block  implements IBlock {
   static EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
     FLOW_RENDER: "flow:render"
   };
 
-  _element = null;
-  _meta = null;
+  _element: any;
+  _meta: {
+    tagName: string,
+  };
+  props: any;
+  eventBus: any;
 
   /** JSDoc
    * @param {string} tagName
@@ -66,34 +80,34 @@ class Block {
   constructor(tagName = "div", props = {}) {
     const eventBus = new EventBus();
 
-//     this._meta = {
-//       tagName,
-//       props
-//     };
+    this._meta = {
+      tagName
+    };
 
-//     this.props = this._makePropsProxy(props);
+    // this.props = this._makePropsProxy(props);
+    this.props = props;
 
-//     this.eventBus = () => eventBus;
+    this.eventBus = () => eventBus;
 
-//     this._registerEvents(eventBus);
-//     eventBus.emit(Block.EVENTS.INIT);
+    this._registerEvents(eventBus);
+    eventBus.emit(Block.EVENTS.INIT);
   }
 
-//   _registerEvents(eventBus) {
-//     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
-//     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
-//     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
-//   }
+  _registerEvents(eventBus: any) {
+    eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
+    // eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+  }
 
-//   _createResources() {
-//     const { tagName } = this._meta;
-//     this._element = this._createDocumentElement(tagName);
-//   }
+  _createResources() {
+    const { tagName } = this._meta;
+    this._element = this._createDocumentElement(tagName);
+  }
 
-//   init() {
-//     this._createResources();
-//     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-//   }
+  init() {
+    this._createResources();
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+  }
 
 //   _componentDidMount() {
 //     this.componentDidMount();
@@ -125,17 +139,23 @@ class Block {
 //     return this._element;
 //   }
 
-//   _render() {
-//     const block = this.render();
-//     // Это небезопасный метод для упрощения логики
-//     // Используйте шаблонизатор из npm или напишите свой безопасный
-//     // Нужно компилировать не в строку (или делать это правильно),
-//     // либо сразу превращать в DOM-элементы и возвращать из compile DOM-ноду
-//     this._element.innerHTML = block;
-//   }
+  _render() {
+    const block = this.render();
+    // Это небезопасный метод для упрощения логики
+    // Используйте шаблонизатор из npm или напишите свой безопасный
+    // Нужно компилировать не в строку (или делать это правильно),
+    // либо сразу превращать в DOM-элементы и возвращать из compile DOM-ноду
+    this._element.innerHTML = block;
+    console.log(this._element)
+  }
 
 //     // Переопределяется пользователем. Необходимо вернуть разметку
-//   render() {}
+  render() {
+    
+    const template = Handlebars.compile(this.props.source)
+
+    return template(this.props.data)
+  }
 
 //   getContent() {
 //     return this.element;
@@ -149,10 +169,10 @@ class Block {
 //     return props;
 //   }
 
-//   _createDocumentElement(tagName) {
-//     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
-//     return document.createElement(tagName);
-//   }
+  _createDocumentElement(tagName:string) {
+    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
+    return document.createElement(tagName);
+  }
 
 //   show() {
 //     this.getContent().style.display = "block";

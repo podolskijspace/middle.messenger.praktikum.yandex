@@ -1,6 +1,6 @@
 import { MainPage } from "./main"
 
-const Main = () => {
+const Main = ():any => {
   const source:string = `
     <section class="messenger">
       <div class="messenger__left">
@@ -110,9 +110,10 @@ const Main = () => {
     formButtons: [{text: 'Сохранить'}]
   }
  
-  const mainPage = new MainPage(source, data)
+  const mainPage = new MainPage('div', {source, data, classNames: 'app'})
+  mainPage.init()
 
-  return mainPage.init()
+  return mainPage._element;
 }
 
 export {Main};
