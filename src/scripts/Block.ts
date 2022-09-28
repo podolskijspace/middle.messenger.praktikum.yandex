@@ -93,10 +93,15 @@ class Block  implements IBlock {
     eventBus.emit(Block.EVENTS.INIT);
   }
 
+  _addListeners() {
+
+  }
+
   _registerEvents(eventBus: any) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     // eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_RENDER, this._addListeners.bind(this));
   }
 
   _createResources() {
@@ -146,7 +151,6 @@ class Block  implements IBlock {
     // Нужно компилировать не в строку (или делать это правильно),
     // либо сразу превращать в DOM-элементы и возвращать из compile DOM-ноду
     this._element.innerHTML = block;
-    console.log(this._element)
   }
 
 //     // Переопределяется пользователем. Необходимо вернуть разметку
@@ -171,16 +175,8 @@ class Block  implements IBlock {
 
   _createDocumentElement(tagName:string) {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
-    return document.createElement(tagName);
+    return document.createElement(tagName); 
   }
-
-//   show() {
-//     this.getContent().style.display = "block";
-//   }
-
-//   hide() {
-//     this.getContent().style.display = "none";
-//   }
 }
 
 export {Block}

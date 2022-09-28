@@ -14,7 +14,7 @@ const Main = ():any => {
         </div>
         <ul class="chats">
           {{#each chats}}
-            <li class="chat-small {{#if this.active}}active{{/if}}">
+            <li data-id={{this.id}} class="chat-small {{#if this.active}}active{{/if}}">
               <div class="chat-small__wrapper">
                 <div class="chat-small__avatar">
                   <div></div>
@@ -100,18 +100,14 @@ const Main = ():any => {
   `
 
   const data:object = {
-    chats:[
-      {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      {name: "Артем Иванов", id: 1, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      {name: "Артем Иванов", id: 2, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      {name: "Артем Иванов", id: 3, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"}
-    ],
     formItems:[{name: 'first_name', text: 'Имя', type: 'text'}],
     formButtons: [{text: 'Сохранить'}]
   }
  
   const mainPage = new MainPage('div', {source, data, classNames: 'app'})
-  mainPage.init()
+  // mainPage.init()
+
+  console.log(mainPage._element)
 
   return mainPage._element;
 }
