@@ -11,7 +11,6 @@ const links = ():void => {
   })
 }
 
-// TODO: Заменить на нормальный тип
 const linkWorker = (e:MouseEvent):void => {
   e.preventDefault();
   if (e.target instanceof HTMLAnchorElement) {

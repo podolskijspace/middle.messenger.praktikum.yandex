@@ -1,4 +1,4 @@
-import { MainPage } from "./main"
+import { MainPage } from "./MainPage"
 
 const Main = ():any => {
   const source:string = `
@@ -105,11 +105,8 @@ const Main = ():any => {
   }
  
   const mainPage = new MainPage('div', {source, data, classNames: 'app'})
-  // mainPage.init()
-
-  console.log(mainPage._element)
 
   return mainPage._element;
 }
 
-export {Main};
+export const MainPageContent:HTMLElement = Main();

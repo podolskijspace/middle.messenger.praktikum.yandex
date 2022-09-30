@@ -1,12 +1,27 @@
-import { EventBus } from "./eventBus";
+import { EventBus, IEventBus } from "./eventBus";
 import Handlebars from "handlebars";
+
+type Props = {
+  source?: string,
+  classNames?: 'string',
+  data?: object,
+}
 
 interface IBlock {
   // render(): string;
   tagName: string
-  props: object,
-  eventBus: any,
-  _registerEvents(eventBus:any): void;
+  props: Props,
+  eventBus: IEventBus,
+  state: object,
+  _registerEvents(eventBus:IEventBus): void,
+  _mount(): void,
+  _update(): void,
+  _createElement(): void,
+  _createState(): void,
+  _addListeners(): void,
+  _deleteListeners(): void,
+  _createResourse(): void,
+  _setState(newState:object): void,
 }
 
 // Нельзя создавать экземпляр данного класса
@@ -17,30 +32,25 @@ class Block  implements IBlock {
     DELETE: "delete"
   };
 
-  tagName: any;
-  props: any;
-  eventBus: any;
-  _element: any;
-  state: any;
+  tagName: string;
+  props: Props;
+  eventBus: IEventBus;
+  _element: HTMLElement;
+  state: object;
 
   constructor(tagName = "div", props = {}) {
-    const eventBus = new EventBus();
-
     this.tagName = tagName;
-
-    // this.props = this._makePropsProxy(props);
     this.props = props;
 
-    this.eventBus = () => eventBus;
+    this.eventBus = new EventBus();
 
-    this._registerEvents(eventBus);
-    eventBus.emit(Block.EVENTS.MOUNT);
+    this._registerEvents(this.eventBus);
+    this.eventBus.emit(Block.EVENTS.MOUNT);
   }
 
   _registerEvents(eventBus: any) {
     eventBus.on(Block.EVENTS.MOUNT, this._mount.bind(this));
     eventBus.on(Block.EVENTS.UPDATE, this._update.bind(this));
-    // eventBus.on(Block.EVENTS.DELETE, this._addListeners.bind(this));
   }
 
   _mount() {
@@ -72,7 +82,7 @@ class Block  implements IBlock {
     this._element.innerHTML = template({...this.props.data, ...this.state})
   }
 
-  setState(newState:any) {
+  _setState(newState:object) {
     this.state = newState;
     this._update();
   }
