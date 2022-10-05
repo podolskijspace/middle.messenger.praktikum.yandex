@@ -1,3 +1,14 @@
-import { render } from "./modules/render";
+import renderDOM from './core/renderDOM';
+import { Block } from './core';
 
-render();
+class MyComponent extends Block {
+  render():string {
+    return `
+      <div> Hello world </div>
+    `
+  }
+}
+
+document.addEventListener("DOMContentLoaded", ():void => {
+  renderDOM(new MyComponent())
+})

@@ -100,13 +100,19 @@ const Main = ():any => {
   `
 
   const data:object = {
+    chats:[
+      {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+      {name: "Артем Иванов", id: 1, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+      {name: "Артем Иванов", id: 2, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+      {name: "Артем Иванов", id: 3, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"}
+    ],
     formItems:[{name: 'first_name', text: 'Имя', type: 'text'}],
     formButtons: [{text: 'Сохранить'}]
   }
  
-  const mainPage = new MainPage('div', {source, data, classNames: 'app'})
+  // const mainPage = new MainPage('div', {source, data, classNames: 'app'})
 
-  return mainPage._element;
+  // return mainPage._element;
 }
 
 export const MainPageContent:HTMLElement = Main();
