@@ -1,4 +1,4 @@
-import {MainPageContent} from "../pages/Main/";
+import {MainPageContent} from "../pages/Main";
 import {notFoundPage} from "../pages/404";
 import {errorPage} from "../pages/500";
 import {authPage} from "../pages/auth";

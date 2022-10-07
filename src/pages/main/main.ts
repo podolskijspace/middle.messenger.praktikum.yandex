@@ -1,7 +1,28 @@
-import { MainPage } from "./MainPage"
+// src/pages/onboarding/onboarding.ts
+import Block from '../../core/Block';
 
-const Main = ():any => {
-  const source:string = `
+export class MainPage extends Block {
+  constructor() {
+    super();
+
+    this.setProps({
+      onButtonClick: this.onButtonClick.bind(this),
+      chats:[
+        {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+        {name: "Артем Иванов", id: 1, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+        {name: "Артем Иванов", id: 2, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+        {name: "Артем Иванов", id: 3, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"}
+      ],
+      formItems:[{name: 'first_name', text: 'Имя', type: 'text'}],
+      formButtons: [{text: 'Сохранить'}]
+    })
+  }
+
+  onButtonClick():void {
+    console.log(this)
+  }
+  render() {
+    return `
     <section class="messenger">
       <div class="messenger__left">
         <div class="messenger__top">
@@ -73,46 +94,33 @@ const Main = ():any => {
           </div>
         </div>
         <div class="write">
-          <textarea name="message" class="write-message"></textarea>
-          <button class="write__button button">Отправить</button>
+          <form class="form form--horizontal" onSubmit={{onSubmit}}>
+            <textarea name="message" class="write-message"></textarea>
+            <button class="write__button button">Отправить</button>
+          </form>
         </div>
       </div>
     </section>
-    <div class="modal">
-      <div class="modal__wrapper">
-        <form class="form form--settings">
-          <ul class="form__list">
-            {{#each formItems}}
-              <li class="form__item">
-                <label class="form__label" for="{{this.name}}">{{this.text}}</label>
-                <input class="form__input" type="{{this.type}}" name="{{this.name}}">
-              </li>
-            {{/each}}
-          </ul>
-          <div class="form__buttons">
-            {{#each formButtons}}
-              <a class="form__button button" href="{{this.href}}">{{this.text}}</a>
-            {{/each}}
-          </div> 
-        </form>
-      </div>
-    </div>
-  `
-
-  const data:object = {
-    chats:[
-      {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      {name: "Артем Иванов", id: 1, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      {name: "Артем Иванов", id: 2, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      {name: "Артем Иванов", id: 3, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"}
-    ],
-    formItems:[{name: 'first_name', text: 'Имя', type: 'text'}],
-    formButtons: [{text: 'Сохранить'}]
+    // <div class="modal">
+    //   <div class="modal__wrapper">
+    //     <form class="form form--settings">
+    //       <ul class="form__list">
+    //         {{#each formItems}}
+    //           <li class="form__item">
+    //             <label class="form__label" for="{{this.name}}">{{this.text}}</label>
+                
+    //             <input class="form__input" type="{{this.type}}" name="{{this.name}}">
+    //           </li>
+    //         {{/each}}
+    //       </ul>
+    //       <div class="form__buttons">
+    //         {{#each formButtons}}
+    //           <a class="form__button button" href="{{this.href}}">{{this.text}}</a>
+    //         {{/each}}
+    //       </div> 
+    //     </form>
+    //   </div>
+    // </div>
+    `;
   }
- 
-  // const mainPage = new MainPage('div', {source, data, classNames: 'app'})
-
-  // return mainPage._element;
 }
-
-export const MainPageContent:HTMLElement = Main();

@@ -1,6 +1,7 @@
 import EventBus from './EventBus';
 // import {nanoid} from 'nanoid';
 import Handlebars from 'handlebars';
+import { nanoid } from 'nanoid';
 
 interface BlockMeta<P = any> {
   props: P;
@@ -17,7 +18,7 @@ export default class Block<P = any> {
   } as const;
 
   // public id = nanoid(6);
-  public id = 6;
+  public id = Math.random();
   private readonly _meta: BlockMeta;
 
   protected _element: Nullable<HTMLElement> = null;
