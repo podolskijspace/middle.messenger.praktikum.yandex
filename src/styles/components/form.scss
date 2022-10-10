@@ -16,12 +16,6 @@
     margin-bottom: 15px;
   }
 
-  &__item {
-    &:not(:last-child) {
-      margin-bottom: 10px;
-    }
-  }
-
   &__label {
     display: block;
     margin-bottom: 5px;
