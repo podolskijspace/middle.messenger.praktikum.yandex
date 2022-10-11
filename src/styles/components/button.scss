@@ -1,16 +1,19 @@
 @import "../vars";
 
 .button {
-  padding: 10px;
   background: #ada;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 10px;
-  border: 0;
-  cursor: pointer;
-  transition: background-color 0.5s;
-
-  &:hover {
-    background: $button-main;
+  button {
+    padding: 10px;
+    background: #ada;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    transition: background-color 0.5s;
+  
+    &:hover {
+      background: $button-main;
+    }
   }
 }

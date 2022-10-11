@@ -1,5 +1,6 @@
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
+import { onSubmit } from '../../utils/helpers';
 
 export class RegistryPage extends Block {
   constructor() {
@@ -7,24 +8,12 @@ export class RegistryPage extends Block {
 
     this.setProps({
       formMod: "auth__form",
-      formItems: [
-        {name: 'login', text: 'Логин', type: 'text'},
-        {name: 'email', text: 'Почта', type: 'email'},
-        {name: 'password', text: 'Пароль', type: 'password'},
-        {name: 'repeatPassword', text: 'Повторите пароль', type: 'password'},
-      ],
-      formButtons: [
-        {href: 'auth', text: 'Зарегистрироваться'},
-      ]
+      onSubmit: ():void => onSubmit("#auth")
     })
   }
 
-  onBlur () {
-    console.log('blur')
-  }
-
   render() {
-    return`<section class="auth">
+    return`<section class="auth" id="auth">
       <div class="container">
         <div class="auth__wrapper">
           <form class="form {{formMod}}">
@@ -42,15 +31,13 @@ export class RegistryPage extends Block {
               {{{Input name="email" type="email" text="Почта"}}}
             </div>
             <div class="form__item">
-              {{{Input name="password" type="password" text="Пароль"}}}
+              {{{Input name="password" type="password" text="Пароль" rule="password" errorMessage="Пароль должен содержать 1 заглвную и 1 строчную букву, 1 символ, 1 цифру, и быть не менее 8 символов"}}}
             </div>
             <div class="form__item">
               {{{Input name="repeatPassword" type="password" text="Повторите пароль"}}}
             </div>
             <div class="form__buttons">
-              {{#each formButtons}}
-                <a class="form__button button link" href="{{this.href}}">{{this.text}}</a>
-              {{/each}}
+              {{{Button text="Зарегистрироваться" onClick=onSubmit}}}
             </div> 
           </form>
         </div>
@@ -58,7 +45,3 @@ export class RegistryPage extends Block {
     </section>`;
   }
 }
-
-// {{#if this.password}}
-//   <a class="auth__forgetPass link" href="forget-password">Восстановить пароль</a>
-// {{/if}}

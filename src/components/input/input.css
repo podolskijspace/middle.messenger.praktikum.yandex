@@ -16,7 +16,7 @@
 
 .input__error {
   color: rgba(241, 18, 18, 0.8);
+  padding-top: 3px;
   font-size: 12px;
-  text-align: center;
-  height: 12px;
+  min-height: 12px;
 }
