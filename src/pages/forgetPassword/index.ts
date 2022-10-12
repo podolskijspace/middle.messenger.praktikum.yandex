@@ -1,0 +1,1 @@
+export { forgetPasswordPage as default } from './forgetPassword';

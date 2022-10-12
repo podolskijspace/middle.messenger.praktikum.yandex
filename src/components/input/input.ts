@@ -23,10 +23,8 @@ const onChange = (event:any, setProps:any) => {
 
   if (rule) {
     const match = value.match(rules[rule])
-    console.log(value, match)
-
     if (match) {
-      setProps({value} )
+      setProps({value, error: null} )
     } else {
       setProps({error: 'error', value} )
     }
