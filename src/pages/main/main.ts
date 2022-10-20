@@ -38,7 +38,7 @@ export class MainPage extends Block {
             <li data-id={{this.id}} class="chat-small {{#if this.active}}active{{/if}}">
               <div class="chat-small__wrapper">
                 <div class="chat-small__avatar">
-                  <div></div>
+                  <div class="chat-small__avatar-img"></div>
                 </div>
                 <div class="chat-small__info">
                   <div class="chat-small__name">

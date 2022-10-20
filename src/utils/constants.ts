@@ -1,4 +1,4 @@
-export const rules:Record<string, RegExp> = {
+export const ValidateRules:Record<string, RegExp> = {
   password: /^[0-9a-zA-Z!"#$%&'()*+,-.\\\/:;<=>?@\[\]^_`{|}~;]{8,}$/g,
   rusString: /^[А-Я]{1}[а-я]{4,}$/g,
   login: /^[A-Za-z0-9]{3,}$/g,

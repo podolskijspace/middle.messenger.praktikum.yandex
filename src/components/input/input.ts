@@ -1,5 +1,5 @@
-import {Block, registerComponent} from '../../core';
-import { rules } from '../../utils/constants';
+import { Block } from '../../core';
+import { ValidateRules } from '../../utils/constants';
 
 import './input.css';
 
@@ -22,7 +22,7 @@ const onChange = (event:any, setProps:any) => {
   const value = input.value
 
   if (rule) {
-    const match = value.match(rules[rule])
+    const match = value.match(ValidateRules[rule])
     if (match) {
       setProps({value, error: null} )
     } else {
