@@ -1,6 +1,53 @@
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
 import { onSubmit } from '../../utils/helpers';
+import { ValidateRules } from '../../utils/constants';
+import {rules} from '../../utils/constants'
+
+interface IRegistryInput {
+  name: string,
+  type: string,
+  text: string,
+  rule?: rules
+}
+
+const registryInputs:Array<IRegistryInput> = [
+  {
+    name: 'first_name',
+    type: 'text',
+    text: 'Имя',
+    rule: 'rusString',
+  },
+  {
+    name: 'second_name',
+    type: 'text',
+    text: 'Фамилия',
+    rule: 'rusString',
+  },
+  {
+    name: 'login',
+    type: 'text',
+    text: 'Логин',
+    rule: 'login',
+  },
+  {
+    name: 'email',
+    type: 'email',
+    text: 'Почта',
+    rule: 'email',
+  },
+  {
+    name: 'password',
+    type: 'password',
+    text: 'Пароль',
+    rule: 'password',
+  },
+  {
+    name: 'repeatPassword',
+    type: 'password',
+    text: 'Повторите пароль',
+  },
+]
 
 export class RegistryPage extends Block {
   constructor() {
@@ -17,25 +64,14 @@ export class RegistryPage extends Block {
       <div class="container">
         <div class="auth__wrapper">
           <form class="form {{formMod}}">
-            <h3 class="form__title">{{pageName}}</h3>
-            <div class="form__item">
-              {{{Input name="first_name" type="text" text="Имя" rule="rusString" errorMessage="Имя должно начинать с большой буквы и содержать только русские буквы"}}}
-            </div>
-            <div class="form__item">
-              {{{Input name="second_name" type="text" text="Фамилия" rule="rusString" errorMessage="Фамилия должна начинатся с большой буквы и содержать только русские буквы"}}}
-            </div>
-            <div class="form__item">
-              {{{Input name="login" type="text" text="Логин"  rule="login" errorMessage="Логин должен содержать только английский буквы и цифры"}}}
-            </div>
-            <div class="form__item">
-              {{{Input name="email" type="email" text="Почта"  rule="email" errorMessage="Почта должна быть вида info@mail.ru"}}}
-            </div>
-            <div class="form__item">
-              {{{Input name="password" type="password" text="Пароль" rule="password" errorMessage="Пароль должен содержать 1 заглвную и 1 строчную букву, 1 символ, 1 цифру, и быть не менее 8 символов"}}}
-            </div>
-            <div class="form__item">
-              {{{Input name="repeatPassword" type="password" text="Повторите пароль"}}}
-            </div>
+            <h1 class="form__title">{{pageName}}</h1>
+            ${registryInputs.map(item => (
+              `
+              <div class="form__item">
+                {{{Input name="${item.name}" type="${item.type}" text="${item.text}" ${item.rule ? `rule="${item.rule}" errorMessage="${ValidateRules[item.rule].message}"` : null} }}}
+              </div>
+              `
+            ))}
             <div class="form__buttons">
               {{{Button text="Зарегистрироваться" onClick=onSubmit}}}
             </div> 

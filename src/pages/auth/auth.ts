@@ -14,7 +14,7 @@ export class AuthPage extends Block {
       <div class="container">
         <div class="auth__wrapper">
           <form class="form {{formMod}}">
-            <h3 class="form__title">{{pageName}}</h3>
+            <h1 class="form__title">{{pageName}}</h1>
             <div class="form__item">
               {{{Input name="login" type="text" text="Логин" }}}
             </div>

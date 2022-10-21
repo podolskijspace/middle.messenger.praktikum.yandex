@@ -1,6 +1,6 @@
 import { Block } from '../../core';
 import { ValidateRules } from '../../utils/constants';
-
+import { rules } from '../../utils/constants';
 import './input.css';
 
 interface InputProps {
@@ -12,30 +12,29 @@ interface InputProps {
   name?: string;
   text?: string;
   value?: string;
-  rule: string;
+  rule: rules;
   input: () => {};
 }
 
-const onChange = (event:any, setProps:any) => {
+const onChange = (event:any, rule:rules, setProps:any) => {
   const input:HTMLInputElement = event.target;
-  const rule = input.dataset.rule
-  const value = input.value
+  const reg:Nullable<RegExp> = rule ? ValidateRules[rule]?.reg : null;
+  const value:string = input.value
 
-  if (rule) {
-    const match = value.match(ValidateRules[rule])
+  if (reg) {
+    const match = value.match(reg)
     if (match) {
       setProps({value, error: null} )
     } else {
       setProps({error: 'error', value} )
     }
-    
   }
 }
 
 export class Input extends Block {
   // constructor({onBlur = () => {}, type = 'text', error, name, text, placeholder, value}: InputProps) {
   constructor({type = 'text', name, text, placeholder, rule, value, errorMessage="Ошибка валидации",}: InputProps) {
-    super({type, placeholder, name, text, rule, value, errorMessage, events: {change: (event:any) => onChange(event, this.setProps)}});
+    super({type, placeholder, name, text, rule, value, errorMessage, events: {change: (event:any) => onChange(event, rule, this.setProps)}});
   
     this.setProps({value: '', errorMessage})
   }
@@ -44,7 +43,7 @@ export class Input extends Block {
     return `
       <div class="input {{class}}">
         <label class="form__label" for="{{name}}">{{text}}</label>
-        <input data-rule="{{rule}}" class="form__input" id="{{name}}" name="{{name}}" type="{{type}}" placeholder="{{placeholder}}" value="${this.props.value}">
+        <input class="form__input" id="{{name}}" name="{{name}}" type="{{type}}" placeholder="{{placeholder}}" value="${this.props.value}">
         <div class="input__error">${this.props.error ? this.props.errorMessage : ''}</div>
       </div>
     `

@@ -77,9 +77,9 @@ export class MainPage extends Block {
                       <div class="chat__text">
                         Привет, хотел у тебя давно спросить, как твои дела?
                       </div>
-                      <div class="chat__time">
+                      <time class="chat__time">
                         16:03
-                      </div>
+                      </time>
                       <div class="chat__status">
                         <i class="fa fa-check" aria-hidden="true"></i>
                       </div>

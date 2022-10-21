@@ -23,7 +23,7 @@ export class forgetPasswordPage extends Block {
       <div class="container">
         <div class="auth__wrapper">
           <form class="form {{formMod}}">
-            <h3 class="form__title">{{pageName}}</h3>
+            <h1 class="form__title">{{pageName}}</h1>
             {{{Input name="email" type="email" text="Почта" }}}
             <div class="form__buttons">
               {{{Button text="Восстановить пароль"}}}
