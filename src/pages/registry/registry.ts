@@ -2,52 +2,7 @@
 import Block from '../../core/Block';
 import { onSubmit } from '../../utils/helpers';
 import { ValidateRules } from '../../utils/constants';
-import {rules} from '../../utils/constants'
-
-interface IRegistryInput {
-  name: string,
-  type: string,
-  text: string,
-  rule?: rules
-}
-
-const registryInputs:Array<IRegistryInput> = [
-  {
-    name: 'first_name',
-    type: 'text',
-    text: 'Имя',
-    rule: 'rusString',
-  },
-  {
-    name: 'second_name',
-    type: 'text',
-    text: 'Фамилия',
-    rule: 'rusString',
-  },
-  {
-    name: 'login',
-    type: 'text',
-    text: 'Логин',
-    rule: 'login',
-  },
-  {
-    name: 'email',
-    type: 'email',
-    text: 'Почта',
-    rule: 'email',
-  },
-  {
-    name: 'password',
-    type: 'password',
-    text: 'Пароль',
-    rule: 'password',
-  },
-  {
-    name: 'repeatPassword',
-    type: 'password',
-    text: 'Повторите пароль',
-  },
-]
+import { registryInputs } from './constants';
 
 export class RegistryPage extends Block {
   constructor() {
@@ -55,12 +10,13 @@ export class RegistryPage extends Block {
 
     this.setProps({
       formMod: "auth__form",
-      onSubmit: ():void => onSubmit("#auth")
+      pageName:"Регистрация",
+      onSubmit: ():void => onSubmit("#registry")
     })
   }
 
   render() {
-    return`<section class="auth" id="auth">
+    return`<section class="auth" id="registry">
       <div class="container">
         <div class="auth__wrapper">
           <form class="form {{formMod}}">
@@ -68,7 +24,7 @@ export class RegistryPage extends Block {
             ${registryInputs.map(item => (
               `
               <div class="form__item">
-                {{{Input name="${item.name}" type="${item.type}" text="${item.text}" ${item.rule ? `rule="${item.rule}" errorMessage="${ValidateRules[item.rule].message}"` : null} }}}
+                {{{Input name="${item.name}" type="${item.type}" text="${item.text}" ${item.rule ? `rule="${item.rule}" errorMessage="${ValidateRules[item.rule].message}"` : ""} }}}
               </div>
               `
             ))}

@@ -1,7 +1,7 @@
 import { Block } from '../../core';
 import { ValidateRules } from '../../utils/constants';
 import { rules } from '../../utils/constants';
-import './input.css';
+import './input.scss';
 
 interface InputProps {
   // onBlur?: () => void;

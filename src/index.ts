@@ -1,6 +1,9 @@
 require("babel-core/register");
 import { renderDOM, registerComponent }  from './core';
 import MainPage from './pages/main';
+import RegistryPage from './pages/registry';
+import EditProfile from './pages/editProfile';
+import AuthPage from './pages/auth';
 import './styles/index.scss';
 
 import Button from './components/button';
@@ -15,5 +18,5 @@ registerComponent(Layout);
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderDOM(new MainPage());
+  renderDOM(new EditProfile());
 });
