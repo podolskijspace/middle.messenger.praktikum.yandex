@@ -16,25 +16,21 @@ interface InputProps {
   input: () => {};
 }
 
-const onChange = (event:any, rule:rules, setProps:any) => {
-  const input:HTMLInputElement = event.target;
+const onChange = (event:InputEvent, rule:rules, setProps: (p:object)=>void) => {
+  const input:HTMLInputElement = event.target as HTMLInputElement;
   const reg:Nullable<RegExp> = rule ? ValidateRules[rule]?.reg : null;
   const value:string = input.value
 
   if (reg) {
-    const match = value.match(reg)
-    if (match) {
-      setProps({value, error: null} )
-    } else {
-      setProps({error: 'error', value} )
-    }
+    const isValid = value.match(reg)
+    setProps({error: isValid ? 'error' : null, value})
   }
 }
 
 export class Input extends Block {
   // constructor({onBlur = () => {}, type = 'text', error, name, text, placeholder, value}: InputProps) {
-  constructor({type = 'text', name, text, placeholder, rule, value, errorMessage="Ошибка валидации",}: InputProps) {
-    super({type, placeholder, name, text, rule, value, errorMessage, events: {change: (event:any) => onChange(event, rule, this.setProps)}});
+  constructor({type = 'text', errorMessage="Ошибка валидации", ...rest}: InputProps) {
+    super({...rest, type, errorMessage, events: {change: (event:any) => onChange(event, rest.rule, this.setProps)}});
   
     this.setProps({value: '', errorMessage})
   }

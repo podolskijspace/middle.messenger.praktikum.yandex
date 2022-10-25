@@ -1,7 +1,7 @@
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
 
-export class forgetPasswordPage extends Block {
+export class ForgetPasswordPage extends Block {
   constructor() {
     super();
 

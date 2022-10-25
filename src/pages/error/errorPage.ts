@@ -1,13 +1,13 @@
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
 
-interface errorInterface {
+interface IErrorInterface {
   status?: number;
   text?: string;
 }
 
-export class errorPage extends Block {
-  constructor({status=500, text="Ошибка"}: errorInterface={}) {
+export class ErrorPage extends Block {
+  constructor({status=500, text="Ошибка"}: IErrorInterface={}) {
     super({status, text});
 
   }
