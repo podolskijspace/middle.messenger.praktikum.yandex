@@ -1,0 +1,46 @@
+@import "../vars";
+
+.chat {
+  flex: 1;
+  background: $chat-background;
+  padding: 10px;
+
+  &__list {
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    width: 50%;
+  }
+
+  &__wrapper-messages {
+    position: relative;
+    padding: 5px 80px 5px 25px;
+    width: max-content;
+    background: #fff;
+    border-radius: 8px;
+  }
+
+  &__name {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  &__time {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 12px;
+  }
+
+  &__status {
+    position: absolute;
+    top: 2px;
+    right: 10px;
+  }
+
+  &__pick-chat {
+    display: none;
+  }
+}
