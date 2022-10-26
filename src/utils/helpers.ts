@@ -1,5 +1,5 @@
 export const onSubmit = (containerQuery:string) => {
-  const container:Nullable<HTMLElement> = document.querySelector(containerQuery)
+  const container:HTMLElement = document.querySelector(containerQuery) as HTMLElement
 
   if (container) {
     const elemsInputs = [...container.querySelectorAll('input')]
@@ -14,4 +14,8 @@ export const onSubmit = (containerQuery:string) => {
 
     console.log(result)
   }
+}
+
+export function isEqual(lhs, rhs) {
+  return lhs === rhs;
 }
