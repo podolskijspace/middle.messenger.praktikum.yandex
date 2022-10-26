@@ -5,6 +5,7 @@ import RegistryPage from './pages/registry';
 import EditProfile from './pages/editProfile';
 import AuthPage from './pages/auth';
 import { Router } from './core/Router';
+import { HTTP } from './core/HTTP';
 
 import Button from './components/button';
 import Link from './components/link';
