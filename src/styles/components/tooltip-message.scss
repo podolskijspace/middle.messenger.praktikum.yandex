@@ -1,0 +1,25 @@
+.tooltip-message {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 15px;
+  max-width: 250px;
+  border-radius: 15px;
+  text-align: center;
+  transition: top 1s;
+
+  &.error {
+    background: red;
+    color: #fff;
+  }
+
+  &.success {
+    background: green;
+    color: #fff;
+  }
+
+  &.work {
+    top: 10px;
+  }
+}

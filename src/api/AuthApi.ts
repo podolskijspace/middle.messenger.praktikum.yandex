@@ -1,14 +1,14 @@
 import { HTTP } from '../core/HTTP';
-import { BaseAPI } from './BaseApi';
+import { BaseAPI } from '../core/BaseApi';
 
 // Так можно делать, чтобы использовать базовый путь!!!
 
 // const chatAPIInstance = new HTTP('api/v1/chats');
 
 class AuthApi extends BaseAPI {
-  async signUp(payload: any) {
+  signUp(payload: any) {
       // Здесь уже не нужно писать полный путь /api/v1/chats/
-      return await HTTP.post(`https://ya-praktikum.tech/api/v2/auth/signup`, {
+      return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/signup`, {
         data: payload, 
         mode: 'cors', 
         headers: {

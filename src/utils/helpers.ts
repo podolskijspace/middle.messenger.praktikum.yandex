@@ -1,6 +1,7 @@
 import { router } from './../core/Router';
+import { message } from './message';
 
-export const onSubmit = (containerQuery:string, apiRequest) => {
+export const onSubmit = async (containerQuery:string, apiRequest, url) => {
   const container:HTMLElement = document.querySelector(containerQuery) as HTMLElement
 
   if (container) {
@@ -14,9 +15,15 @@ export const onSubmit = (containerQuery:string, apiRequest) => {
       }
     })
 
-    const result = apiRequest(JSON.stringify(payload))
+    const result = await apiRequest(JSON.stringify(payload))
 
-    console.log(result)
+    if (result.status === 200) {
+      message.success('Пользователь зарегистрирован');
+      router.go(`${url}`);
+    } else {
+      console.warn(result);
+      message.error(JSON.parse(result.responseText)?.reason || "Ошибка");
+    }
   }
 }
 

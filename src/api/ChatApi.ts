@@ -1,5 +1,5 @@
 import { HTTP } from '../core/HTTP';
-import { BaseAPI } from './BaseApi';
+import { BaseAPI } from '../core/BaseApi';
 
 //Так можно делать, чтобы использовать базовый путь!!!
 

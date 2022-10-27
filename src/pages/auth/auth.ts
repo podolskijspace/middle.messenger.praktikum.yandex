@@ -3,6 +3,7 @@ import { authInputs } from './constants';
 import { ValidateRules } from '../../utils/constants';
 import { onSubmit } from '../../utils/helpers';
 import { onLink } from '../../utils/helpers';
+import { authApi } from '../../api/AuthApi';
 
 export class AuthPage extends Block {
   constructor() {
@@ -10,8 +11,8 @@ export class AuthPage extends Block {
 
     this.setProps({
       formMod: "auth__form", 
-      onSubmit: ():void => onSubmit("#auth"),
-      onLink: ():void => onLink("/registry"),
+      // onSubmit: ():any => onSubmit("#auth", (payload:any) => authApi.signUp(payload), '/auth'),
+      onLink: (e):void => onLink(e, '/registry'),
       pageName:"Авторизация"
     })
   }
