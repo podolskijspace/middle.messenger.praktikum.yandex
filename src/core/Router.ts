@@ -1,6 +1,6 @@
 import { Route } from "./Route";
 
-export class Router {
+class Router {
   constructor(rootQuery) {
       if (Router.__instance) {
           return Router.__instance;
@@ -58,3 +58,5 @@ export class Router {
     return this.routes.find(route => route.match(pathname));
   }
 }
+
+export const router = new Router("#app");

@@ -4,8 +4,8 @@ import MainPage from './pages/main';
 import RegistryPage from './pages/registry';
 import EditProfile from './pages/editProfile';
 import AuthPage from './pages/auth';
-import { Router } from './core/Router';
-import { HTTP } from './core/HTTP';
+import ForgetPasswordPage from './pages/forgetPassword';
+import { router } from './core/Router';
 
 import Button from './components/button';
 import Link from './components/link';
@@ -20,8 +20,6 @@ registerComponent(Input);
 registerComponent(Layout);
 
 
-const router = new Router("#app");
-
 // Можно обновиться на /user и получить сразу пользователя
 
 
@@ -32,11 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .use("/edit-profile", EditProfile)
     .use("/auth", AuthPage)
     .use("/registry", RegistryPage)
+    .use("/forget-password", ForgetPasswordPage)
     .start();
-
-    // setTimeout(()=>{router.go('/edit-profile')}, 1000)
-    // setTimeout(()=>{router.go('/auth')}, 2000)
-    // setTimeout(()=>{router.go('/registry')}, 3000)
     // setTimeout(()=>{router.go('/')}, 5000)
-
 });

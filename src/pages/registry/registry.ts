@@ -3,6 +3,7 @@ import Block from '../../core/Block';
 import { onSubmit } from '../../utils/helpers';
 import { ValidateRules } from '../../utils/constants';
 import { registryInputs } from './constants';
+import { authApi } from '../../api/AuthApi';
 
 export class RegistryPage extends Block {
   constructor() {
@@ -11,7 +12,7 @@ export class RegistryPage extends Block {
     this.setProps({
       formMod: "auth__form",
       pageName:"Регистрация",
-      onSubmit: ():void => onSubmit("#registry")
+      onSubmit: ():any => onSubmit("#registry", (payload:any) => {authApi.signUp(payload)})
     })
   }
 
@@ -27,7 +28,7 @@ export class RegistryPage extends Block {
                 {{{Input name="${item.name}" type="${item.type}" text="${item.text}" ${item.rule ? `rule="${item.rule}" errorMessage="${ValidateRules[item.rule].message}"` : ""} }}}
               </div>
               `
-            ))}
+            )).join('')}
             <div class="form__buttons">
               {{{Button text="Зарегистрироваться" onClick=onSubmit}}}
             </div> 

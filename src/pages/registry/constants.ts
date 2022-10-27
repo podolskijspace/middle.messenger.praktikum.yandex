@@ -24,6 +24,11 @@ export const registryInputs:Array<IInputs> = [
     rule: 'email',
   },
   {
+    name: 'phone',
+    type: 'number',
+    text: 'Телефон',
+  },
+  {
     name: 'password',
     type: 'password',
     text: 'Пароль',

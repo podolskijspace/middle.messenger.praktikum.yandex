@@ -2,6 +2,7 @@ import Block from '../../core/Block';
 import { authInputs } from './constants';
 import { ValidateRules } from '../../utils/constants';
 import { onSubmit } from '../../utils/helpers';
+import { onLink } from '../../utils/helpers';
 
 export class AuthPage extends Block {
   constructor() {
@@ -10,6 +11,7 @@ export class AuthPage extends Block {
     this.setProps({
       formMod: "auth__form", 
       onSubmit: ():void => onSubmit("#auth"),
+      onLink: ():void => onLink("/registry"),
       pageName:"Авторизация"
     })
   }
@@ -27,9 +29,10 @@ export class AuthPage extends Block {
                 {{{Input name="${item.name}" type="${item.type}" text="${item.text}" ${item.rule ? `rule="${item.rule}" errorMessage="${ValidateRules[item.rule].message}"` : ""} }}}
               </div>
               `
-            ))}
+            )).join('')}
+            {{{Link text="Восстановить пароль" className="auth__restore-password" to="/forget-password"}}}
             <div class="form__buttons">
-              {{{Button text="Зарегистрироваться"}}}
+              {{{Button text="Зарегистрироваться" onClick=onLink}}}
               {{{Button text="Войти" onClick=onSubmit}}}
             </div> 
           </form>
