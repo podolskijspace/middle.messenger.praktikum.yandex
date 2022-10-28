@@ -1,5 +1,7 @@
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
+import { onSubmit } from '../../utils/helpers';
+import { authApi } from '../../api/AuthApi';
 
 export class MainPage extends Block {
   constructor() {
@@ -7,6 +9,11 @@ export class MainPage extends Block {
 
     this.setProps({
       onButtonClick: this.onButtonClick.bind(this),
+      onLogout: ():any => onSubmit({
+          api: (payload:any) => authApi.logout(), 
+          url: '/auth',
+          successMesage: 'Вы успешно вышли из системы'
+        }),
       chats:[
         {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
         {name: "Артем Иванов", id: 1, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
@@ -60,7 +67,7 @@ export class MainPage extends Block {
               Артем Иванов
             </div>
             <div class="chat-info__settings">
-              <i class="fa fa-cog" aria-hidden="true"></i>
+              {{{Button text="Выйти" onClick=onLogout}}}
             </div>
           </div>
         </div>

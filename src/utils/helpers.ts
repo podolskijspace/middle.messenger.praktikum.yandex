@@ -1,9 +1,16 @@
 import { router } from './../core/Router';
 import { message } from './message';
 
-export const onSubmit = async (containerQuery:string, apiRequest, url) => {
-  const container:HTMLElement = document.querySelector(containerQuery) as HTMLElement
+type submitPaylod = {
+  query?: string,
+  api: () => any,
+  url: string,
+  successMessage: string,
+}
 
+export const onSubmit = async ({query, api, url, successMessage}:submitPaylod) => {
+  const container:HTMLElement = document.querySelector(query) as HTMLElement
+  let result
   if (container) {
     const elemsInputs = [...container.querySelectorAll('input')]
 
@@ -15,15 +22,19 @@ export const onSubmit = async (containerQuery:string, apiRequest, url) => {
       }
     })
 
-    const result = await apiRequest(JSON.stringify(payload))
+    result = await api(JSON.stringify(payload))
+  } else {
+    result = await api(JSON.stringify())
+  }
 
-    if (result.status === 200) {
-      message.success('Пользователь зарегистрирован');
-      router.go(`${url}`);
-    } else {
-      console.warn(result);
-      message.error(JSON.parse(result.responseText)?.reason || "Ошибка");
-    }
+  
+
+  if (result.status === 200) {
+    message.success(successMessage);
+    router.go(`${url}`);
+  } else {
+    console.warn(result);
+    message.error(JSON.parse(result.responseText)?.reason || "Ошибка");
   }
 }
 

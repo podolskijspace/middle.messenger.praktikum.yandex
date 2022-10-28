@@ -16,6 +16,24 @@ class AuthApi extends BaseAPI {
         },
       });
   }
+
+  signIn(payload: any) {
+    return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/signin`, {
+      data: payload, 
+      mode: 'cors', 
+      credentials: 'include',
+      headers: {
+      'content-type': 'application/json', 
+      },
+    });
+  }
+
+  logout() {
+    return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/logout`, {
+      mode: 'cors', 
+      credentials: 'include',
+    });
+  }
 }
 
 export const authApi = new AuthApi()

@@ -11,7 +11,12 @@ export class AuthPage extends Block {
 
     this.setProps({
       formMod: "auth__form", 
-      // onSubmit: ():any => onSubmit("#auth", (payload:any) => authApi.signUp(payload), '/auth'),
+      onSubmit: ():any => onSubmit({
+        query: "#auth", 
+        api: (payload:any) => authApi.signIn(payload), 
+        url: '/',
+        successMessage: 'Вы успешно авторизованы'
+      }),
       onLink: (e):void => onLink(e, '/registry'),
       pageName:"Авторизация"
     })

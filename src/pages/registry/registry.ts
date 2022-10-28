@@ -13,7 +13,12 @@ export class RegistryPage extends Block {
     this.setProps({
       formMod: "auth__form",
       pageName:"Регистрация",
-      onSubmit: ():any => onSubmit("#registry", (payload:any) => authApi.signUp(payload), '/auth'),
+      onSubmit: ():any => onSubmit({
+        query: "#registry", 
+        api: (payload:any) => authApi.signUp(payload), 
+        url: '/auth',
+        successMesage: 'Вы успешно зарегистрировались'
+      }),
       onLink: (e) => onLink(e, '/auth')
     })
   }
