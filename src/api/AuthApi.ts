@@ -10,7 +10,6 @@ class AuthApi extends BaseAPI {
       // Здесь уже не нужно писать полный путь /api/v1/chats/
       return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/signup`, {
         data: payload, 
-        mode: 'cors', 
         headers: {
         'content-type': 'application/json', // Данные отправляем в формате JSON
         },
@@ -20,8 +19,6 @@ class AuthApi extends BaseAPI {
   signIn(payload: any) {
     return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/signin`, {
       data: payload, 
-      mode: 'cors', 
-      credentials: 'include',
       headers: {
       'content-type': 'application/json', 
       },
@@ -29,10 +26,7 @@ class AuthApi extends BaseAPI {
   }
 
   logout() {
-    return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/logout`, {
-      mode: 'cors', 
-      credentials: 'include',
-    });
+    return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/logout`);
   }
 }
 

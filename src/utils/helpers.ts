@@ -10,6 +10,8 @@ type submitPaylod = {
 
 export const onSubmit = async ({query, api, url, successMessage}:submitPaylod) => {
   const container:HTMLElement = document.querySelector(query) as HTMLElement
+
+  console.log(successMessage)
   let result
   if (container) {
     const elemsInputs = [...container.querySelectorAll('input')]
