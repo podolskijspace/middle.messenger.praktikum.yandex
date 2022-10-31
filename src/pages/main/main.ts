@@ -2,17 +2,18 @@
 import Block from '../../core/Block';
 import { onSubmit } from '../../utils/helpers';
 import { authApi } from '../../api/AuthApi';
+import { connect } from '../../core/Store';
 
-export class MainPage extends Block {
+class MainPage extends Block {
   constructor() {
     super();
 
     this.setProps({
       onButtonClick: this.onButtonClick.bind(this),
       onLogout: ():any => onSubmit({
-          api: (payload:any) => authApi.logout(), 
+          api: () => authApi.logout(), 
           url: '/auth',
-          successMesage: 'Вы успешно вышли из системы'
+          successMessage: 'Вы успешно вышли из системы'
         }),
       chats:[
         {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
@@ -131,3 +132,12 @@ export class MainPage extends Block {
     `;
   }
 }
+
+function mapUserToProps(state) {
+  return {
+    name: state.user.name,
+    avatar: state.user.avatar,
+  };
+}
+
+export default connect(MainPage, mapUserToProps)

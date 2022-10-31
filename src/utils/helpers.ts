@@ -1,14 +1,14 @@
 import { router } from './../core/Router';
 import { message } from './message';
 
-type submitPaylod = {
+type submitPayload = {
   query?: string,
   api: () => any,
   url: string,
   successMessage: string,
 }
 
-export const onSubmit = async ({query, api, url, successMessage}:submitPaylod) => {
+export const onSubmit = async ({query, api, url, successMessage}:submitPayload) => {
   const container:HTMLElement = document.querySelector(query) as HTMLElement
 
   console.log(successMessage)
