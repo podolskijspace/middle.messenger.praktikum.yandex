@@ -30,7 +30,12 @@ export function connect(Component: typeof Block, mapStateToProps) {
       // подписываемся на событие
         store.on(StoreEvents.Updated, () => {
           // вызываем обновление компонента, передав данные из хранилища
-          this.setProps({...mapStateToProps(store.getState())});
+          const newState = mapStateToProps(store.getState());
+                  
+          // если что-то из используемых данных поменялось, обновляем компонент
+          if (!isEqual(state, newState)) {
+            this.setProps({...newState});
+          }
         });
     }
   } 
@@ -40,5 +45,5 @@ export function connect(Component: typeof Block, mapStateToProps) {
 /* 
 1. Добавить метод set
 2. Добавить методы getState в Store
-
+3. Функция isEqual
 */
