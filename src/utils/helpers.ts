@@ -49,3 +49,45 @@ export function onLink(e: MouseEvent, url:string) {
 
   router.go(`${url}`)
 }
+
+type Indexed<T = unknown> = {
+  [key in string]: T;
+};
+
+export const isObject = (value:unknown):boolean => {
+  if (typeof value === 'object' &&
+  !Array.isArray(value) &&
+  value !== null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export const merge = (lhs: Indexed, rhs: Indexed): Indexed =>{
+  const obj:Record<string, Indexed | unknown> = {};
+  for (let key in lhs) {
+    if (isObject(lhs[key])) {
+      obj[key] = merge(lhs[key] as Indexed, {})
+    } else {
+      obj[key] = lhs[key]
+    }
+  }
+  for (let key in rhs) {
+    if (isObject(rhs[key])) {
+      if (obj[key]) {
+        obj[key] = merge(rhs[key] as Indexed, obj[key] as Indexed)
+      } else {
+        obj[key] = merge({}, rhs[key] as Indexed)
+      }
+    } else {
+      if (obj[key]) {
+      } else {
+        obj[key] = rhs[key]
+      }
+    }
+  }
+  
+  return obj;
+}
+
