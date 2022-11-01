@@ -91,3 +91,48 @@ export const merge = (lhs: Indexed, rhs: Indexed): Indexed =>{
   return obj;
 }
 
+
+function set(object: Indexed, path: string, value: unknown): Indexed | unknown {
+	if (typeof path !== 'string') {
+    throw new Error('path должен быть строкой')
+  }
+
+  if (!isObject(object)) {
+    return object
+  }
+
+  const newObject = JSON.parse(JSON.stringify(object))
+
+  const arrayPath = path.split('.')
+
+  if (arrayPath.length === 1) {
+    return {...newObject, [arrayPath[0]]: value}
+  }
+
+  arrayPath.reduceRight((prev, current, index) => {
+    if (arrayPath.length - 1 === index) {
+      prev[current] = value
+      return  prev
+    } else if (index === 0) {
+      return newObject[current] = prev
+    } else {
+      return {[current]: prev}
+    }
+  }, {} as Indexed)
+
+  return newObject
+}
+
+export default set
+
+console.log(
+  set({ foo: 5 }, 'bar.baz.bar', 10) // { foo: 5, bar: { baz: 10 } }
+)
+
+console.log(
+  set({ foo: 5 }, 'bar', 10) // { foo: 5, baz: 10  }
+)
+
+console.log(
+  set(3, 'foo.bar', 'baz') // 3
+)
