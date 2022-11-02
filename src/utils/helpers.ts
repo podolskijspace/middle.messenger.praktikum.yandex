@@ -92,7 +92,7 @@ export const merge = (lhs: Indexed, rhs: Indexed): Indexed =>{
 }
 
 
-function set(object: Indexed, path: string, value: unknown): Indexed | unknown {
+export function set(object: Indexed, path: string, value: unknown): Indexed | unknown {
 	if (typeof path !== 'string') {
     throw new Error('path должен быть строкой')
   }
@@ -101,12 +101,11 @@ function set(object: Indexed, path: string, value: unknown): Indexed | unknown {
     return object
   }
 
-  const newObject = JSON.parse(JSON.stringify(object))
-
   const arrayPath = path.split('.')
 
   if (arrayPath.length === 1) {
-    return {...newObject, [arrayPath[0]]: value}
+    object[arrayPath[0]] = value
+    return object
   }
 
   arrayPath.reduceRight((prev, current, index) => {
@@ -114,25 +113,52 @@ function set(object: Indexed, path: string, value: unknown): Indexed | unknown {
       prev[current] = value
       return  prev
     } else if (index === 0) {
-      return newObject[current] = prev
+      return object[current] = prev
     } else {
       return {[current]: prev}
     }
   }, {} as Indexed)
 
-  return newObject
+  return object
 }
 
-export default set
+type PlainObject<T = any> = {
+  [k in string]: T;
+};
 
-console.log(
-  set({ foo: 5 }, 'bar.baz.bar', 10) // { foo: 5, bar: { baz: 10 } }
-)
+function isPlainObject(value: unknown): value is PlainObject {
+  return typeof value === 'object'
+      && value !== null
+      && value.constructor === Object
+      && Object.prototype.toString.call(value) === '[object Object]';
+}
 
-console.log(
-  set({ foo: 5 }, 'bar', 10) // { foo: 5, baz: 10  }
-)
+function isArray(value: unknown): value is [] {
+  return Array.isArray(value);
+}
 
-console.log(
-  set(3, 'foo.bar', 'baz') // 3
-)
+function isArrayOrObject(value: unknown): value is [] | PlainObject {
+  return isPlainObject(value) || isArray(value);
+}
+
+export function isEqualObj(lhs: PlainObject, rhs: PlainObject) {
+  if (Object.keys(lhs).length !== Object.keys(rhs).length) {
+      return false;
+  }
+
+  for (const [key, value] of Object.entries(lhs)) {
+      const rightValue = rhs[key];
+      if (isArrayOrObject(value) && isArrayOrObject(rightValue)) {
+          if (isEqualObj(value, rightValue)) {
+              continue;
+          }
+          return false;
+      }
+
+      if (value !== rightValue) {
+          return false;
+      }
+  }
+
+  return true;
+}
