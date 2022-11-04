@@ -162,3 +162,52 @@ export function isEqualObj(lhs: PlainObject, rhs: PlainObject) {
 
   return true;
 }
+
+type newIndexed<T = undefined> = {
+  [key in string]: T | newIndexed
+}
+
+type arr<T = undefined> = Array<newIndexed | T>
+
+type something<T = unknown> = T | newIndexed | arr
+
+type IndexedWIthArray = newIndexed | Array<something>
+
+
+
+// Авторское решение https://playcode.io/874530 
+// ПЕРЕДЕЛАТЬ ПОД АВТОРСКОЕ, ТОЛЬКО УПРОСТИТЬ!!! (надо ли??)
+function cloneDeep(obj: IndexedWIthArray):IndexedWIthArray {
+  const array = isArray(obj)
+  if (array) {
+    const newArray = [] as arr;
+    (obj as arr).forEach((item, i) => {
+      if (isObject(item) || isArray(item)) {
+        newArray[i] = cloneDeep(item as IndexedWIthArray) as newIndexed
+      } else {
+        newArray[i] = item
+      }
+    })
+    return [...newArray]
+  } else if (isObject(obj)) {
+    const newObj:newIndexed = {} as newIndexed;
+    for (let key in obj) {
+      if (isObject((obj as newIndexed)[key] || isArray((obj as newIndexed)[key]))) {
+        newObj[key] = cloneDeep((obj as newIndexed)[key] as newIndexed) as newIndexed;
+      } else {
+        newObj[key] = (obj as newIndexed)[key]
+      }
+    }
+
+    return {...newObj}
+  } else {
+    throw new Error('Вы передали неправильный параметр')
+  }
+}
+
+export default cloneDeep; 
+
+const objects = [{ 'a': 1 }, { 'b': 2 }];
+const deep = cloneDeep(objects);
+
+console.log(deep); // => false
