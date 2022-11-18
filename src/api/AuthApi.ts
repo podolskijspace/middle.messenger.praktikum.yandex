@@ -28,6 +28,10 @@ class AuthApi extends BaseAPI {
   logout() {
     return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/logout`);
   }
+
+  getUserInfo () {
+    return HTTP.get(`https://ya-praktikum.tech/api/v2/auth/user`)
+  }
 }
 
 export const authApi = new AuthApi()

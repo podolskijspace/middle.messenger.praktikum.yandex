@@ -3,10 +3,31 @@ import Block from '../../core/Block';
 import { onSubmit } from '../../utils/helpers';
 import { authApi } from '../../api/AuthApi';
 import { connect } from '../../core/Store';
+import store from "../../core/Store";
+import {chatApi} from "../../api/ChatApi";
 
-class MainPage extends Block {
+const getUserInfo = async () => {
+  const result = await authApi.getUserInfo()
+    .then(result => JSON.parse(result.response))
+
+  const name = `${result.second_name} ${result.first_name}`
+
+  store.set("user", {name, avatar: result.avatar})
+}
+
+const getChats = async () => {
+  const result = await chatApi.getChats()
+    .then(result => JSON.parse(result.response))
+
+  store.set("chats", result)
+}
+
+class Main extends Block {
   constructor() {
     super();
+
+    getUserInfo();
+    getChats();
 
     this.setProps({
       onButtonClick: this.onButtonClick.bind(this),
@@ -15,14 +36,14 @@ class MainPage extends Block {
           url: '/auth',
           successMessage: 'Вы успешно вышли из системы'
         }),
-      chats:[
-        {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-        {name: "Артем Иванов", id: 1, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-        {name: "Артем Иванов", id: 2, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-        {name: "Артем Иванов", id: 3, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"}
-      ],
+      // chats:[
+      //   {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+      //   {name: "Артем Иванов", id: 1, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+      //   {name: "Артем Иванов", id: 2, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
+      //   {name: "Артем Иванов", id: 3, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"}
+      // ],
       formItems:[{name: 'first_name', text: 'Имя', type: 'text'}],
-      formButtons: [{text: 'Сохранить'}]
+      formButtons: [{text: 'Сохранить'}],
     })
   }
 
@@ -65,7 +86,7 @@ class MainPage extends Block {
         <div class="messenger__top right__top">
           <div class="chat-info">
             <div class="chat-info__name">
-              Артем Иванов
+              {{name}}
             </div>
             <div class="chat-info__settings">
               {{{Button text="Выйти" onClick=onLogout}}}
@@ -137,7 +158,11 @@ function mapUserToProps(state) {
   return {
     name: state.user.name,
     avatar: state.user.avatar,
+    chats: state.chats,
   };
 }
 
-export default connect(MainPage, mapUserToProps)
+const MainPage = connect(Main, mapUserToProps)
+// const MainPage = Main;
+
+export {MainPage}

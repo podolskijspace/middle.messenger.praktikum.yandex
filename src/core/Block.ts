@@ -91,7 +91,7 @@ export default abstract class Block<P = any> {
       return;
     }
 
-    Object.assign(this.props, nextProps);
+    Object.assign(this.props, nextProps)
   };
 
   setState = (nextState: any) => {

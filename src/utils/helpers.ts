@@ -11,7 +11,6 @@ type submitPayload = {
 export const onSubmit = async ({query, api, url, successMessage}:submitPayload) => {
   const container:HTMLElement = document.querySelector(query) as HTMLElement
 
-  console.log(successMessage)
   let result
   if (container) {
     const elemsInputs = [...container.querySelectorAll('input')]
@@ -209,5 +208,3 @@ export default cloneDeep;
 
 const objects = [{ 'a': 1 }, { 'b': 2 }];
 const deep = cloneDeep(objects);
-
-console.log(deep); // => false

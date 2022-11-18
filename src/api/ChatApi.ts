@@ -6,9 +6,9 @@ import { BaseAPI } from '../core/BaseApi';
 // const chatAPIInstance = new HTTP('api/v1/chats');
 
 class ChatAPI extends BaseAPI {
-  create() {
+  getChats() {
       // Здесь уже не нужно писать полный путь /api/v1/chats/
-      return HTTP.post(`$/api/v1/chats/`, {title: 'string'});
+      return HTTP.get(`https://ya-praktikum.tech/api/v2/chats/`, );
   }
 
   request() {
