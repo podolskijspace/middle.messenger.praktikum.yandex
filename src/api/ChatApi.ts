@@ -8,7 +8,17 @@ import { BaseAPI } from '../core/BaseApi';
 class ChatAPI extends BaseAPI {
   getChats() {
       // Здесь уже не нужно писать полный путь /api/v1/chats/
-      return HTTP.get(`https://ya-praktikum.tech/api/v2/chats/`, );
+      return HTTP.get(`https://ya-praktikum.tech/api/v2/chats`, );
+  }
+  createChat(payload:unknown) {
+    // Здесь уже не нужно писать полный путь /api/v1/chats/
+    console.log('here')
+    return HTTP.post(`https://ya-praktikum.tech/api/v2/chats`,{
+      data: payload,
+      headers: {
+        'content-type': 'application/json', // Данные отправляем в формате JSON
+      },
+    });
   }
 
   request() {

@@ -9,147 +9,231 @@ import {chatApi} from "../../api/ChatApi";
 const getUserInfo = async () => {
   const result = await authApi.getUserInfo()
     .then(result => JSON.parse(result.response))
-
   const name = `${result.second_name} ${result.first_name}`
 
   store.set("user", {name, avatar: result.avatar})
 }
 
-const getChats = async () => {
-  const result = await chatApi.getChats()
-    .then(result => JSON.parse(result.response))
+const onCreateChat = ():void => {
+  const modal = document.querySelector("#modal-create-chat")
 
-  store.set("chats", result)
+  modal?.classList.remove('active')
 }
+
+const contextElems = [
+  {
+    title: "Список пользователей",
+	  callback: ()=>{console.log("Открываю модалку")}
+  },
+  {
+    title: "Удалить чат",
+	  callback: ()=>{console.log("Удаляю чат")}
+  },
+]
 
 class Main extends Block {
   constructor() {
     super();
 
     getUserInfo();
-    getChats();
+    this.getChats();
 
     this.setProps({
+      contextElems,
+      onOpenModal: this.onOpenModal,
+      onContextMenu: this.onContextMenu.bind(this),
+      onCreateChat: () => onSubmit({
+        query: "#modal-create-chat",
+        api: (payload) => chatApi.createChat(payload),
+        successMessage: "Чат успешно создан",
+        callback: () => {
+          onCreateChat();
+          this.getChats.apply(this)
+        },
+      }),
+      onSmallChatClick: this.onSmallChatClick.bind(this),
+      onContextElemClick: this.onContextElemClick.bind(this),
       onButtonClick: this.onButtonClick.bind(this),
       onLogout: ():any => onSubmit({
           api: () => authApi.logout(), 
           url: '/auth',
           successMessage: 'Вы успешно вышли из системы'
         }),
-      // chats:[
-      //   {name: "Артем Иванов", id: 0, active: true, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      //   {name: "Артем Иванов", id: 1, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      //   {name: "Артем Иванов", id: 2, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"},
-      //   {name: "Артем Иванов", id: 3, text: "Артем: Привет, хотел у тебя давно спросить, как твои дела? как твои дела? как твои дела? как твои дела?"}
-      // ],
-      formItems:[{name: 'first_name', text: 'Имя', type: 'text'}],
-      formButtons: [{text: 'Сохранить'}],
+    })
+  }
+
+  onContextElemClick(event):void {
+		const target = event.target.closest('.context-menu__item')
+	  if (target) {
+			const id = +target.dataset.id;
+			contextElems[id].callback();
+	  }
+  }
+
+  onContextMenu(event):void {
+    event.preventDefault()
+    const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
+    const x = event.clientX;
+    const y = event.clientY;
+    contextElem.style.top = `${y + 2}px`;
+    contextElem.style.left = `${x + 2}px`;
+		contextElem.classList.add('active');
+
+    document.body.addEventListener('click', this.deleteContextMenu)
+  }
+
+  deleteContextMenu(event):void {
+    if (!event.target.closest('.context-menu')) {
+      const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
+	    contextElem.classList.remove('active');
+      document.body.removeEventListener('click', this.deleteContextMenu)
+    }
+
+
+  }
+
+  onOpenModal():void {
+    const modal = document.querySelector("#modal-create-chat")
+
+    modal?.classList.add('active')
+  }
+
+  onSmallChatClick(event) {
+    const target = event.target.closest('.chat-small')
+    const id = target.dataset.id;
+    let activeChat;
+    const chats = this.props.chats?.map(chat => {
+      if (chat.id == id) {
+        activeChat = chat;
+        return {...chat, active: true}
+      } else {
+        return {...chat, active: false}
+      }
+    })
+      this.setProps({
+        activeChat: activeChat ? activeChat : false,
+        chats
+      })
+  }
+
+  async getChats () {
+    const result = await chatApi.getChats()
+      .then(result => JSON.parse(result.response))
+
+    this.setProps({
+      chats: result,
+      activeChat: false
     })
   }
 
   onButtonClick():void {
     console.log(this)
   }
+
   render() {
     return `
-    <section class="messenger">
-      <div class="messenger__left">
-        <div class="messenger__top">
-          <div class="search">
-            <input type="text" class="search__input">
-            <div class="search__button">
-              <i class="fa fa-cog" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-        <ul class="chats">
-          {{#each chats}}
-            <li data-id={{this.id}} class="chat-small {{#if this.active}}active{{/if}}">
-              <div class="chat-small__wrapper">
-                <div class="chat-small__avatar">
-                  <div class="chat-small__avatar-img"></div>
-                </div>
-                <div class="chat-small__info">
-                  <div class="chat-small__name">
-                    {{this.name}}
-                  </div>
-                  <div class="chat-small__last-message">
-                    {{this.text}}
-                  </div> 
-                </div>
+    <div> 
+      <section class="messenger">
+        <div class="messenger__left">
+          <div class="messenger__top">
+            <div class="search">
+              <div class="search__button">
+                <i class="fa fa-cog" aria-hidden="true"></i>
               </div>
-            </li>
-          {{/each}}
-        </ul>
-      </div>
-      <div class="messenger__right">
-        <div class="messenger__top right__top">
-          <div class="chat-info">
-            <div class="chat-info__name">
-              {{name}}
-            </div>
-            <div class="chat-info__settings">
-              {{{Button text="Выйти" onClick=onLogout}}}
+              <input type="text" class="search__input">
+              
+              <div class="search__button">
+                {{{ButtonWithIcon icon="fa-plus" onClick=onOpenModal}}}
+              </div>
             </div>
           </div>
+          <ul class="chats">
+            ${this.props.chats?.map(chat => (
+              ` {{{ChatSmallComponent 
+                  onClick=onSmallChatClick
+                  title="${chat.title}"
+                  last_message="${chat.last_message?.content}"
+                  id="${chat.id}"
+                  active="${chat.active}"
+                  onContextMenu=onContextMenu
+                }}}`
+            ))?.join('')}
+          </ul>
         </div>
-        <div class="chat">
-          <ul class="chat__list">
-            <li class="chat__item">
-              <div class="chat__wrapper">
-                <ul class="chat__list-messages">
-                  <li class="chat__item-messages">
-                    <div class="chat__wrapper-messages">
-                      <div class="chat__name">
-                        Артем
-                      </div>
-                      <div class="chat__text">
-                        Привет, хотел у тебя давно спросить, как твои дела?
-                      </div>
-                      <time class="chat__time">
-                        16:03
-                      </time>
-                      <div class="chat__status">
-                        <i class="fa fa-check" aria-hidden="true"></i>
-                      </div>
+        <div class="messenger__right">
+          <div class="messenger__top right__top">
+            <div class="chat-info">
+              <div class="chat-info__name">
+                ${this.props.activeChat ? (`
+                    ${this.props.activeChat.title}
+                `) : ""}
+              </div>
+              <div class="chat-info__settings">
+                {{{Button text="Выйти" onClick=onLogout}}}
+              </div>
+            </div>
+          </div>
+          <div class="chat">
+            ${this.props.activeChat ? (
+              `
+                <ul class="chat__list">
+                  <li class="chat__item">
+                    <div class="chat__wrapper">
+                      <ul class="chat__list-messages">
+<!--                        <li class="chat__item-messages">-->
+<!--                          <div class="chat__wrapper-messages">-->
+<!--                            <div class="chat__name">-->
+<!--                              Артем-->
+<!--                            </div>-->
+<!--                            <div class="chat__text">-->
+<!--                              Привет, хотел у тебя давно спросить, как твои дела?-->
+<!--                            </div>-->
+<!--                            <time class="chat__time">-->
+<!--                              16:03-->
+<!--                            </time>-->
+<!--                            <div class="chat__status">-->
+<!--                              <i class="fa fa-check" aria-hidden="true"></i>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </li>-->
+                      </ul>
                     </div>
                   </li>
                 </ul>
+            `) : `
+              <div class="chat__pick-chat">
+                Выберите чат из списка слева
               </div>
-            </li>
-          </ul>
-          <div class="chat__pick-chat">
-            Выберите чат из списка
+            `}
+          </div>
+          <div class="write">
+          ${this.props.activeChat ? (
+            `
+              <form class="form form--horizontal" onSubmit={{onSubmit}}>
+                <textarea name="message" class="write-message"></textarea>
+                <button class="write__button button">Отправить</button>
+              </form>
+            `) : ""}
           </div>
         </div>
-        <div class="write">
-          <form class="form form--horizontal" onSubmit={{onSubmit}}>
-            <textarea name="message" class="write-message"></textarea>
-            <button class="write__button button">Отправить</button>
+      </section>
+      <div class="modal" id="modal-create-chat">
+        <div class="modal__wrapper">
+          <form class="form form--settings">
+            <ul class="form__list">
+                <li class="form__item">
+                  <label class="form__label" for="title">Заголовок чата</label>
+                  <input class="form__input" id="title" type="text" name="title">
+                </li>
+            </ul>
+            <div class="form__buttons">
+              {{{Button text="Создать чат" onClick=onCreateChat}}}
+            </div> 
           </form>
         </div>
       </div>
-    </section>
-    // <div class="modal">
-    //   <div class="modal__wrapper">
-    //     <form class="form form--settings">
-    //       <ul class="form__list">
-    //         {{#each formItems}}
-    //           <li class="form__item">
-    //             <label class="form__label" for="{{this.name}}">{{this.text}}</label>
-                
-    //             <input class="form__input" type="{{this.type}}" name="{{this.name}}">
-    //           </li>
-    //         {{/each}}
-    //       </ul>
-    //       <div class="form__buttons">
-    //         {{#each formButtons}}
-    //           <a class="form__button button" href="{{this.href}}">{{this.text}}</a>
-    //         {{/each}}
-    //       </div> 
-    //     </form>
-    //   </div>
-    // </div>
+      {{{ContextMenu onClick=onContextElemClick elems=contextElems}}}
+    </div>
     `;
   }
 }
@@ -166,3 +250,24 @@ const MainPage = connect(Main, mapUserToProps)
 // const MainPage = Main;
 
 export {MainPage}
+
+// <div class="modal">
+//   <div class="modal__wrapper">
+//     <form class="form form--settings">
+//       <ul class="form__list">
+//         {{#each formItems}}
+//           <li class="form__item">
+//             <label class="form__label" for="{{this.name}}">{{this.text}}</label>
+
+//             <input class="form__input" type="{{this.type}}" name="{{this.name}}">
+//           </li>
+//         {{/each}}
+//       </ul>
+//       <div class="form__buttons">
+//         {{#each formButtons}}
+//           <a class="form__button button" href="{{this.href}}">{{this.text}}</a>
+//         {{/each}}
+//       </div>
+//     </form>
+//   </div>
+// </div>

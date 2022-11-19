@@ -6,22 +6,22 @@ type submitPayload = {
   api: () => any,
   url: string,
   successMessage: string,
+  callback?: () => void,
 }
 
-export const onSubmit = async ({query, api, url, successMessage}:submitPayload) => {
+export const onSubmit = async ({query, api, url, successMessage, callback = () => {}}:submitPayload) => {
   const container:HTMLElement = document.querySelector(query) as HTMLElement
 
   let result
   if (container) {
     const elemsInputs = [...container.querySelectorAll('input')]
-
     const payload:Record<string, string> = {};
-
     elemsInputs.forEach(item => {
       if (item.id) {
         payload[item.id] = item.value;
       }
     })
+
 
     result = await api(JSON.stringify(payload))
   } else {
@@ -32,7 +32,10 @@ export const onSubmit = async ({query, api, url, successMessage}:submitPayload) 
 
   if (result.status === 200) {
     message.success(successMessage);
-    router.go(`${url}`);
+    if (url) {
+      router.go(`${url}`);
+    }
+    callback();
   } else {
     console.warn(result);
     message.error(JSON.parse(result.responseText)?.reason || "Ошибка");
@@ -202,6 +205,10 @@ function cloneDeep(obj: IndexedWIthArray):IndexedWIthArray {
   } else {
     throw new Error('Вы передали неправильный параметр')
   }
+}
+
+export const isUndefinedOrFalse = (elem:undefined):boolean =>{
+  return !!(elem !== "undefined" && elem !== "false" && elem)
 }
 
 export default cloneDeep; 
