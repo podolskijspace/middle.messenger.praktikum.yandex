@@ -12,7 +12,6 @@ class ChatAPI extends BaseAPI {
   }
   createChat(payload:unknown) {
     // Здесь уже не нужно писать полный путь /api/v1/chats/
-    console.log('here')
     return HTTP.post(`https://ya-praktikum.tech/api/v2/chats`,{
       data: payload,
       headers: {
@@ -20,6 +19,21 @@ class ChatAPI extends BaseAPI {
       },
     });
   }
+
+	deleteChat(payload:unknown) {
+		// Здесь уже не нужно писать полный путь /api/v1/chats/
+		return HTTP.delete(`https://ya-praktikum.tech/api/v2/chats`,{
+			data: payload,
+			headers: {
+				'content-type': 'application/json', // Данные отправляем в формате JSON
+			},
+		});
+	}
+
+	getChatUsers(chat_id:unknown) {
+		// Здесь уже не нужно писать полный путь /api/v1/chats/
+		return HTTP.get(`https://ya-praktikum.tech/api/v2/chats/${chat_id}/users`);
+	}
 
   request() {
       // Здесь уже не нужно писать полный путь /api/v1/chats/

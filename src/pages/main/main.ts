@@ -5,6 +5,7 @@ import { authApi } from '../../api/AuthApi';
 import { connect } from '../../core/Store';
 import store from "../../core/Store";
 import {chatApi} from "../../api/ChatApi";
+import {message} from "../../utils/message";
 
 const getUserInfo = async () => {
   const result = await authApi.getUserInfo()
@@ -20,16 +21,25 @@ const onCreateChat = ():void => {
   modal?.classList.remove('active')
 }
 
-const contextElems = [
+const contextElems = (onOpenUsersModal, onDeleteChat, ) => [
   {
     title: "Список пользователей",
-	  callback: ()=>{console.log("Открываю модалку")}
+	  callback: onOpenUsersModal
   },
   {
     title: "Удалить чат",
-	  callback: ()=>{console.log("Удаляю чат")}
+	  callback: onDeleteChat
   },
 ]
+
+let currentChatId = null;
+let chatUsers = [];
+
+const onOpenModal = (selector):void => {
+	const modal = document.querySelector(selector)
+
+	modal?.classList.add('active')
+}
 
 class Main extends Block {
   constructor() {
@@ -39,7 +49,7 @@ class Main extends Block {
     this.getChats();
 
     this.setProps({
-      contextElems,
+      contextElems: contextElems(this.onOpenUsersModal.bind(this), this.onDeleteChat.bind(this)),
       onOpenModal: this.onOpenModal,
       onContextMenu: this.onContextMenu.bind(this),
       onCreateChat: () => onSubmit({
@@ -62,11 +72,34 @@ class Main extends Block {
     })
   }
 
+	async onDeleteChat():void {
+		if (currentChatId) {
+			await chatApi.deleteChat(JSON.stringify({chatId: +currentChatId}))
+			message.success("Чат успешно удален");
+			this.getChats();
+		}
+	}
+
+	onOpenCreateChatModal() {
+		onOpenModal("#modal-create-chat")
+	}
+
+	async onOpenUsersModal() {
+		if (currentChatId) {
+			const result = await chatApi.getChatUsers(currentChatId)
+				.then(result => JSON.parse(result.response))
+			this.setProps({chatUsers: result})
+			onOpenModal("#modal-users")
+		}
+
+
+	}
+
   onContextElemClick(event):void {
 		const target = event.target.closest('.context-menu__item')
 	  if (target) {
 			const id = +target.dataset.id;
-			contextElems[id].callback();
+		  this.props.contextElems[id].callback();
 	  }
   }
 
@@ -75,6 +108,7 @@ class Main extends Block {
     const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
     const x = event.clientX;
     const y = event.clientY;
+		currentChatId = event.target.closest('.chat-small').dataset.id;
     contextElem.style.top = `${y + 2}px`;
     contextElem.style.left = `${x + 2}px`;
 		contextElem.classList.add('active');
@@ -82,20 +116,13 @@ class Main extends Block {
     document.body.addEventListener('click', this.deleteContextMenu)
   }
 
+
   deleteContextMenu(event):void {
-    if (!event.target.closest('.context-menu')) {
+    if (!event.target.closest('.context-menu') || event.target.closest('.context-menu__item')) {
       const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
 	    contextElem.classList.remove('active');
       document.body.removeEventListener('click', this.deleteContextMenu)
     }
-
-
-  }
-
-  onOpenModal():void {
-    const modal = document.querySelector("#modal-create-chat")
-
-    modal?.classList.add('active')
   }
 
   onSmallChatClick(event) {
@@ -143,7 +170,7 @@ class Main extends Block {
               <input type="text" class="search__input">
               
               <div class="search__button">
-                {{{ButtonWithIcon icon="fa-plus" onClick=onOpenModal}}}
+                {{{ButtonWithIcon icon="fa-plus" onClick=onOpenCreateChatModal}}}
               </div>
             </div>
           </div>
@@ -219,13 +246,33 @@ class Main extends Block {
       </section>
       <div class="modal" id="modal-create-chat">
         <div class="modal__wrapper">
-          <form class="form form--settings">
+          <form class="form">
             <ul class="form__list">
                 <li class="form__item">
                   <label class="form__label" for="title">Заголовок чата</label>
                   <input class="form__input" id="title" type="text" name="title">
                 </li>
             </ul>
+            <div class="form__buttons">
+              {{{Button text="Создать чат" onClick=onCreateChat}}}
+            </div> 
+          </form>
+        </div>
+      </div>
+      <div class="modal" id="modal-users">
+        <div class="modal__wrapper">
+          <form class="form">
+						<ul>
+							${this.props.chatUsers?.map(user => {
+								const {display_name, first_name, second_name} = user
+								return (` 
+ 									<li>
+										<div>
+											${display_name ? display_name : `${second_name} ${first_name}`}
+										</div> 
+									</li> `
+              )})?.join('')}
+						</ul>
             <div class="form__buttons">
               {{{Button text="Создать чат" onClick=onCreateChat}}}
             </div> 
