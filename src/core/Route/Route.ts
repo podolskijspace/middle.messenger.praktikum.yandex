@@ -1,4 +1,4 @@
-import { isEqual } from "../utils/helpers";
+import { isEqual } from "../../utils/helpers";
 
 export class Route {
   constructor(pathname, view, props) {
