@@ -9,6 +9,7 @@ const METHODS = {
 // Самая простая версия. Реализовать штучку со всеми проверками им предстоит в конце спринта
 // Необязательный метод
 function queryStringify(data) {
+	console.log(data)
 if (typeof data !== 'object') {
     throw new Error('Data must be object');
 }

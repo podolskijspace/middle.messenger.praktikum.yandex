@@ -7,10 +7,7 @@ export enum StoreEvents {
 }
 
 const initialState = {
-  user: {
-    name: null,
-    avatar: null
-  }
+  user: {}
 }
 
 // наследуем Store от EventBus, чтобы его методы были сразу доступны у экземпляра Store

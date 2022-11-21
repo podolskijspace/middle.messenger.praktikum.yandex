@@ -7,9 +7,10 @@ type submitPayload = {
   url: string,
   successMessage: string,
   callback?: () => void,
+	notStringify?: boolean,
 }
 
-export const onSubmit = async ({query, api, url, successMessage, callback = () => {}}:submitPayload) => {
+export const onSubmit = async ({query, api, url, successMessage, callback = () => {}, notStringify}:submitPayload) => {
   const container:HTMLElement = document.querySelector(query) as HTMLElement
 
   let result
@@ -17,18 +18,16 @@ export const onSubmit = async ({query, api, url, successMessage, callback = () =
     const elemsInputs = [...container.querySelectorAll('input')]
     const payload:Record<string, string> = {};
     elemsInputs.forEach(item => {
-      if (item.id) {
+      if (item.id && !item.dataset.notAdd) {
         payload[item.id] = item.value;
       }
     })
 
 
-    result = await api(JSON.stringify(payload))
+    result = await api(notStringify ? payload : JSON.stringify(payload))
   } else {
-    result = await api(JSON.stringify())
+    result = await api()
   }
-
-  
 
   if (result.status === 200) {
     message.success(successMessage);

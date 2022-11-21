@@ -6,13 +6,13 @@ import { connect } from '../../core/Store';
 import store from "../../core/Store";
 import {chatApi} from "../../api/ChatApi";
 import {message} from "../../utils/message";
+import {userApi} from "../../api/UserApi";
 
 const getUserInfo = async () => {
   const result = await authApi.getUserInfo()
     .then(result => JSON.parse(result.response))
-  const name = `${result.second_name} ${result.first_name}`
-
-  store.set("user", {name, avatar: result.avatar})
+  // store.set("user", result)
+	return result;
 }
 
 const onCreateChat = ():void => {
@@ -21,19 +21,88 @@ const onCreateChat = ():void => {
   modal?.classList.remove('active')
 }
 
-const contextElems = (onOpenUsersModal, onDeleteChat, ) => [
+const onCloseChangePasswordModal = ():void => {
+	const modal = document.querySelector("#modal-change-password")
+
+	modal?.classList.remove('active')
+}
+
+const onCloseEditProfileModal = ():void => {
+	const modal = document.querySelector("#modal-edit-profile")
+
+	modal?.classList.remove('active')
+}
+
+const settingsList = [
+	{
+		label: "first_name",
+		text: "Имя",
+		type: "text",
+	},
+	{
+		label: "second_name",
+		text: "Фамилия",
+		type: "text",
+	},
+	{
+		label: "display_name",
+		text: "Отображаемое имя",
+		type: "text",
+	},
+	{
+		label: "login",
+		text: "Логин",
+		type: "text",
+	},
+	{
+		label: "email",
+		text: "Почта",
+		type: "email",
+	},
+	{
+		label: "phone",
+		text: "Телефон",
+		type: "text",
+	},
+]
+
+const onAddUser = ():void => {
+	const modal = document.querySelector("#modal-add-user-to-chat")
+
+	modal?.classList.remove('active')
+}
+
+const contextElems = (onOpenUsersModal, onOpenAddUserToChat, onDeleteChat) => [
   {
     title: "Список пользователей",
 	  callback: onOpenUsersModal
   },
+	{
+		title: "Добавить пользователя в чат",
+		callback: onOpenAddUserToChat
+	},
   {
     title: "Удалить чат",
 	  callback: onDeleteChat
   },
 ]
 
+const settingsElems = (onChangePassword, onEditProfile) => [
+	{
+		title: "Сменить пароль",
+		callback: onChangePassword
+	},
+	{
+		title: "Редактировать профиль",
+		callback: onEditProfile
+	},
+	{
+		title: "Выйти из системы",
+		callback: () => console.log('Выход из системы в разработке')
+	},
+]
+
 let currentChatId = null;
-let chatUsers = [];
 
 const onOpenModal = (selector):void => {
 	const modal = document.querySelector(selector)
@@ -41,17 +110,44 @@ const onOpenModal = (selector):void => {
 	modal?.classList.add('active')
 }
 
-class Main extends Block {
-  constructor() {
-    super();
 
-    getUserInfo();
+const deleteContextMenu = (event):void => {
+	if (!event.target.closest('.context-menu') || event.target.closest('.context-menu__item')) {
+	const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
+	contextElem.classList.remove('active');
+	document.body.removeEventListener('click', deleteContextMenu)
+}
+}
+
+const onContextMenu = (event) => {
+	const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
+	const x = event.clientX;
+	const y = event.clientY;
+	contextElem.style.top = `${y + 2}px`;
+	contextElem.style.left = `${x + 2}px`;
+	contextElem.classList.add('active');
+
+	document.body.addEventListener('click', deleteContextMenu)
+}
+
+class Main extends Block {
+  constructor(props) {
+    super(props);
     this.getChats();
 
     this.setProps({
-      contextElems: contextElems(this.onOpenUsersModal.bind(this), this.onDeleteChat.bind(this)),
-      onOpenModal: this.onOpenModal,
+	    contextElems: [],
+	    onDeleteUserFromChat: this.onDeleteUserFromChat.bind(this),
+	    onOpenCreateChatModal: this.onOpenCreateChatModal,
       onContextMenu: this.onContextMenu.bind(this),
+	    onEditProfile: () => onSubmit({
+		    query: "#modal-edit-profile",
+		    api: (payload) => userApi.editProfile(payload),
+		    successMessage: "Данные о пользователе изменены",
+		    callback: () => {
+			    onCloseEditProfileModal();
+		    },
+	    }),
       onCreateChat: () => onSubmit({
         query: "#modal-create-chat",
         api: (payload) => chatApi.createChat(payload),
@@ -61,9 +157,29 @@ class Main extends Block {
           this.getChats.apply(this)
         },
       }),
+	    onChangePassword: () => onSubmit({
+		    query: "#modal-change-password",
+		    api: (payload) => userApi.changePassword(payload),
+		    successMessage: "Пароль изменен",
+		    callback: () => {
+			    onCloseChangePasswordModal();
+		    },
+	    }),
+	    onAddUserToChat: () => onSubmit({
+		    query: "#modal-add-user-to-chat",
+		    api: (payload) => {
+					const newPayload = JSON.stringify({users: [+payload.user_id], chatId: currentChatId})
+			    chatApi.addUserToChat(newPayload)
+		    },
+		    notStringify: true,
+		    successMessage: "Пользователь добавлен в чат",
+		    callback: () => {
+			    onAddUser();
+		    },
+	    }),
       onSmallChatClick: this.onSmallChatClick.bind(this),
       onContextElemClick: this.onContextElemClick.bind(this),
-      onButtonClick: this.onButtonClick.bind(this),
+	    onSettingsButton: this.onSettingsButton.bind(this),
       onLogout: ():any => onSubmit({
           api: () => authApi.logout(), 
           url: '/auth',
@@ -71,6 +187,20 @@ class Main extends Block {
         }),
     })
   }
+
+	async onDeleteUserFromChat(event):void {
+		const id = event.target.closest('.chat-user-list').dataset.id;
+		const payload = JSON.stringify({
+			users: [id],
+			chatId: currentChatId
+		})
+
+		await chatApi.deleteUserFromChat(payload);
+
+		this.onOpenUsersModal();
+
+		message.success('Пользователь удален')
+	}
 
 	async onDeleteChat():void {
 		if (currentChatId) {
@@ -84,6 +214,25 @@ class Main extends Block {
 		onOpenModal("#modal-create-chat")
 	}
 
+	onOpenAddUserToChat() {
+		onOpenModal("#modal-add-user-to-chat")
+	}
+
+	onOpenChangePasswordModal() {
+		onOpenModal("#modal-change-password")
+	}
+
+	async onOpenEditProfileModal() {
+
+		const result = await getUserInfo();
+
+		this.setProps({userInfo: result})
+
+		onOpenModal("#modal-edit-profile");
+
+	}
+
+
 	async onOpenUsersModal() {
 		if (currentChatId) {
 			const result = await chatApi.getChatUsers(currentChatId)
@@ -91,8 +240,6 @@ class Main extends Block {
 			this.setProps({chatUsers: result})
 			onOpenModal("#modal-users")
 		}
-
-
 	}
 
   onContextElemClick(event):void {
@@ -103,26 +250,29 @@ class Main extends Block {
 	  }
   }
 
+	onSettingsButton(event):void {
+		event.stopPropagation();
+		this.setProps({
+			contextElems: settingsElems(
+				this.onOpenChangePasswordModal.bind(this),
+				this.onOpenEditProfileModal.bind(this),
+				// this.onDeleteChat.bind(this)
+			)
+		})
+		onContextMenu(event)
+	}
+
   onContextMenu(event):void {
+	  currentChatId = event.target.closest('.chat-small').dataset.id;
     event.preventDefault()
-    const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
-    const x = event.clientX;
-    const y = event.clientY;
-		currentChatId = event.target.closest('.chat-small').dataset.id;
-    contextElem.style.top = `${y + 2}px`;
-    contextElem.style.left = `${x + 2}px`;
-		contextElem.classList.add('active');
-
-    document.body.addEventListener('click', this.deleteContextMenu)
-  }
-
-
-  deleteContextMenu(event):void {
-    if (!event.target.closest('.context-menu') || event.target.closest('.context-menu__item')) {
-      const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
-	    contextElem.classList.remove('active');
-      document.body.removeEventListener('click', this.deleteContextMenu)
-    }
+	  this.setProps({
+		  contextElems: contextElems(
+		  	this.onOpenUsersModal.bind(this),
+		    this.onOpenAddUserToChat.bind(this),
+		    this.onDeleteChat.bind(this)
+		  )
+	  })
+	  onContextMenu(event)
   }
 
   onSmallChatClick(event) {
@@ -153,10 +303,6 @@ class Main extends Block {
     })
   }
 
-  onButtonClick():void {
-    console.log(this)
-  }
-
   render() {
     return `
     <div> 
@@ -165,10 +311,9 @@ class Main extends Block {
           <div class="messenger__top">
             <div class="search">
               <div class="search__button">
-                <i class="fa fa-cog" aria-hidden="true"></i>
+              	{{{ButtonWithIcon icon="fa-cog" onClick=onSettingsButton}}}
               </div>
               <input type="text" class="search__input">
-              
               <div class="search__button">
                 {{{ButtonWithIcon icon="fa-plus" onClick=onOpenCreateChatModal}}}
               </div>
@@ -244,6 +389,29 @@ class Main extends Block {
           </div>
         </div>
       </section>
+      
+      <div class="modal" id="modal-edit-profile">
+        <div class="modal__wrapper modal--settings">
+          <form class="form">
+            <ul class="form__list">
+                ${settingsList.map(setting => {
+									const userInfo = this.props.userInfo
+									const value = userInfo ? userInfo[setting.label] : null;
+									const setValue = value ? value : "" 
+	                return (`
+										<li class="form__item">
+		                  <label class="form__label" for="${setting.label}">${setting.text}</label>
+		                  <input class="form__input" id="${setting.label}" value="${setValue}" type="${setting.type}" name="${setting.label}">
+		                </li>
+									`)
+								})?.join('')}
+            </ul>
+            <div class="form__buttons">
+              {{{Button text="Добавить пользователя" onClick=onEditProfile}}}
+            </div> 
+          </form>
+        </div>
+      </div>
       <div class="modal" id="modal-create-chat">
         <div class="modal__wrapper">
           <form class="form">
@@ -259,17 +427,56 @@ class Main extends Block {
           </form>
         </div>
       </div>
+      <div class="modal" id="modal-add-user-to-chat">
+        <div class="modal__wrapper modal--settings">
+          <form class="form">
+            <ul class="form__list">
+                <li class="form__item">
+                  <label class="form__label" for="user_id">id пользователя</label>
+                  <input class="form__input" id="user_id" type="text" name="user_id">
+                </li>
+            </ul>
+            <div class="form__buttons">
+              {{{Button text="Добавить пользователя" onClick=onAddUserToChat}}}
+            </div> 
+          </form>
+        </div>
+      </div>
+      <div class="modal" id="modal-change-password">
+        <div class="modal__wrapper">
+          <form class="form form--settings">
+            <ul class="form__list">
+                <li class="form__item">
+                  <label class="form__label" for="oldPassword">Старый пароль</label>
+                  <input class="form__input" id="oldPassword" type="text" name="oldPassword">
+                </li>
+                <li class="form__item">
+                  <label class="form__label" for="newPassword">Новый пароль</label>
+                  <input class="form__input" id="newPassword" type="text" name="newPassword">
+                </li>
+                <li class="form__item">
+                  <label class="form__label" for="rePassword">Повторите пароль</label>
+                  <input class="form__input" data-not-add="true" id="rePassword" type="text" name="rePassword">
+                </li>
+            </ul>
+            <div class="form__buttons">
+              {{{Button text="Добавить пользователя" onClick=onChangePassword}}}
+            </div> 
+          </form>
+        </div>
+      </div>
       <div class="modal" id="modal-users">
         <div class="modal__wrapper">
           <form class="form">
 						<ul>
 							${this.props.chatUsers?.map(user => {
-								const {display_name, first_name, second_name} = user
+								const {display_name, first_name, second_name, id} = user
 								return (` 
- 									<li>
+ 									<li class="flex chat-user-list" data-id=${id}>
 										<div>
-											${display_name ? display_name : `${second_name} ${first_name}`}
+											${second_name} ${first_name}${display_name ? ` (${display_name})` : ''}
 										</div> 
+										{{{ButtonWithIcon icon="fa-close" onClick=onDeleteUserFromChat}}}
 									</li> `
               )})?.join('')}
 						</ul>
@@ -286,11 +493,9 @@ class Main extends Block {
 }
 
 function mapUserToProps(state) {
-  return {
-    name: state.user.name,
-    avatar: state.user.avatar,
-    chats: state.chats,
-  };
+  return {user: {
+    ...state.user
+  }};
 }
 
 const MainPage = connect(Main, mapUserToProps)

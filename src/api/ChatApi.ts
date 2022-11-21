@@ -35,6 +35,26 @@ class ChatAPI extends BaseAPI {
 		return HTTP.get(`https://ya-praktikum.tech/api/v2/chats/${chat_id}/users`);
 	}
 
+	addUserToChat(payload:unknown) {
+		// Здесь уже не нужно писать полный путь /api/v1/chats/
+		return HTTP.put(`https://ya-praktikum.tech/api/v2/chats/users`, {
+			data: payload,
+			headers: {
+				'content-type': 'application/json', // Данные отправляем в формате JSON
+			},
+		});
+	}
+
+	deleteUserFromChat(payload:unknown) {
+		// Здесь уже не нужно писать полный путь /api/v1/chats/
+		return HTTP.delete(`https://ya-praktikum.tech/api/v2/chats/users`, {
+			data: payload,
+			headers: {
+				'content-type': 'application/json', // Данные отправляем в формате JSON
+			},
+		});
+	}
+
   request() {
       // Здесь уже не нужно писать полный путь /api/v1/chats/
       return HTTP.get('/api/v1/chats/full');
