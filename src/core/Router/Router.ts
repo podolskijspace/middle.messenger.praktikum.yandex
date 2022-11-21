@@ -1,4 +1,4 @@
-import Route from "./Route";
+import Route from "../Route";
 
 class Router {
   constructor(rootQuery) {
@@ -36,8 +36,7 @@ class Router {
       if (this._currentRoute) {
         this._currentRoute.leave();
       }
-
-      this._currentRoute = route;
+      this._currentRoute  = route;
       
       route.render(route, pathname);
   }

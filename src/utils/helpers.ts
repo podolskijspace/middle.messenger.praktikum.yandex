@@ -1,4 +1,4 @@
-import { router } from './../core/Router';
+import { router } from '../core/Router/Router';
 import { message } from './message';
 
 type submitPayload = {

@@ -1,3 +1,5 @@
+import {expect} from "chai";
+
 require("babel-core/register");
 import { renderDOM, registerComponent }  from './core';
 import MainPage from './pages/main';
@@ -5,7 +7,7 @@ import RegistryPage from './pages/registry';
 import EditProfile from './pages/editProfile';
 import AuthPage from './pages/auth';
 import ForgetPasswordPage from './pages/forgetPassword';
-import { router } from './core/Router';
+import router from './core/Router';
 import ButtonWithIcon from "./components/buttonWithIcon";
 import {ChatSmallComponent} from "./components/chatSmallComponent/chatSmallComponent";
 import {ContextMenu} from "./components/contextMenu/ContextMenu";
@@ -39,5 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .use("/forget-password", ForgetPasswordPage)
     .use("/profile", EditProfile)
     .start();
+
     // setTimeout(()=>{router.go('/')}, 5000)
 });
