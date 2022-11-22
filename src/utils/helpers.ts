@@ -210,6 +210,10 @@ export const isUndefinedOrFalse = (elem:undefined):boolean =>{
   return !!(elem !== "undefined" && elem !== "false" && elem)
 }
 
+export const addZero = (num) => {
+	return num < 10 ? `0${num}` : num
+}
+
 export default cloneDeep; 
 
 const objects = [{ 'a': 1 }, { 'b': 2 }];

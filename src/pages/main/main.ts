@@ -1,12 +1,14 @@
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
-import { onSubmit } from '../../utils/helpers';
+import {addZero, onSubmit} from '../../utils/helpers';
 import { authApi } from '../../api/AuthApi';
 import { connect } from '../../core/Store';
 import store from "../../core/Store";
 import {chatApi} from "../../api/ChatApi";
 import {message} from "../../utils/message";
 import {userApi} from "../../api/UserApi";
+import {messageApi} from "../../api/MessageApi";
+import {isArray} from "util";
 
 const getUserInfo = async () => {
   const result = await authApi.getUserInfo()
@@ -134,11 +136,14 @@ class Main extends Block {
   constructor(props) {
     super(props);
     this.getChats();
+		this.getUserInfo();
 
     this.setProps({
 	    contextElems: [],
+	    messages: [],
 	    onDeleteUserFromChat: this.onDeleteUserFromChat.bind(this),
 	    onOpenCreateChatModal: this.onOpenCreateChatModal,
+	    onSendMessage: this.onSendMessage.bind(this),
       onContextMenu: this.onContextMenu.bind(this),
 	    onEditProfile: () => onSubmit({
 		    query: "#modal-edit-profile",
@@ -202,6 +207,17 @@ class Main extends Block {
 		message.success('Пользователь удален')
 	}
 
+	onSendMessage (event) {
+		const form = document.querySelector('#add-message-to-chat')
+		const textarea = form.querySelector('textarea');
+
+		this.props.socket.send(JSON.stringify({
+		  content: textarea.value,
+		  type: 'message',
+		}));
+		textarea.value = "";
+	}
+
 	async onDeleteChat():void {
 		if (currentChatId) {
 			await chatApi.deleteChat(JSON.stringify({chatId: +currentChatId}))
@@ -222,16 +238,17 @@ class Main extends Block {
 		onOpenModal("#modal-change-password")
 	}
 
-	async onOpenEditProfileModal() {
+	async getUserInfo() {
 
 		const result = await getUserInfo();
 
 		this.setProps({userInfo: result})
-
-		onOpenModal("#modal-edit-profile");
-
 	}
 
+	async onOpenEditProfileModal() {
+		this.getUserInfo();
+		onOpenModal("#modal-edit-profile");
+	}
 
 	async onOpenUsersModal() {
 		if (currentChatId) {
@@ -275,22 +292,68 @@ class Main extends Block {
 	  onContextMenu(event)
   }
 
-  onSmallChatClick(event) {
+  async onSmallChatClick(event) {
     const target = event.target.closest('.chat-small')
-    const id = target.dataset.id;
+    const CHAT_ID = target.dataset.id;
     let activeChat;
     const chats = this.props.chats?.map(chat => {
-      if (chat.id == id) {
+      if (chat.id == CHAT_ID) {
         activeChat = chat;
         return {...chat, active: true}
       } else {
         return {...chat, active: false}
       }
     })
-      this.setProps({
-        activeChat: activeChat ? activeChat : false,
-        chats
-      })
+
+	  //Сокеты:
+		const TOKEN_VALUE = await messageApi.getToken(CHAT_ID)
+			.then(result => {
+				const answer = JSON.parse(result.response);
+				return answer.token
+			})
+
+	  const USER_ID = this.props.userInfo.id
+		const socket = messageApi.createWebSocket(USER_ID, CHAT_ID, TOKEN_VALUE);
+
+	  socket.addEventListener('open', () => {
+		  console.log('Соединение установлено');
+			this.setProps({messages: [], socket})
+
+		  socket.send(JSON.stringify({
+			  content: '0',
+			  type: 'get old',
+		  }));
+		  // socket.send(JSON.stringify({
+			//   content: 'Моё первое сообщение миру!',
+			//   type: 'message',
+		  // }));
+	  });
+
+	  socket.addEventListener('close', event => {
+		  if (event.wasClean) {
+			  console.log('Соединение закрыто чисто');
+		  } else {
+			  console.log('Обрыв соединения');
+		  }
+
+		  console.log(`Код: ${event.code} | Причина: ${event.reason}`);
+	  });
+
+	  socket.addEventListener('message', event => {
+			const result = JSON.parse(event.data);
+		  console.log('Получены данные', result);
+			const array = isArray(result) ? [...result] : [result]
+			this.setProps({messages: [...array, ...this.props.messages]})
+	  });
+
+	  socket.addEventListener('error', event => {
+		  console.log('Ошибка', event.message);
+	  });
+
+	  this.setProps({
+      activeChat: activeChat ? activeChat : false,
+      chats
+    })
   }
 
   async getChats () {
@@ -352,22 +415,31 @@ class Main extends Block {
                   <li class="chat__item">
                     <div class="chat__wrapper">
                       <ul class="chat__list-messages">
-<!--                        <li class="chat__item-messages">-->
-<!--                          <div class="chat__wrapper-messages">-->
-<!--                            <div class="chat__name">-->
-<!--                              Артем-->
-<!--                            </div>-->
-<!--                            <div class="chat__text">-->
-<!--                              Привет, хотел у тебя давно спросить, как твои дела?-->
-<!--                            </div>-->
-<!--                            <time class="chat__time">-->
-<!--                              16:03-->
-<!--                            </time>-->
-<!--                            <div class="chat__status">-->
-<!--                              <i class="fa fa-check" aria-hidden="true"></i>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </li>-->
+	                      ${this.props.messages.map(message =>{
+													const date = new Date(message.time);
+													const today = new Date;
+													const todayFormatDate = `${addZero(today.getDate())}.${addZero(today.getMonth() + 1)}.${addZero(today.getFullYear())}`;
+													const formatTime = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
+	                        const formatDate = `${addZero(date.getDate())}.${addZero(date.getMonth() + 1)}.${addZero(date.getFullYear())}`;
+													return (`
+														<li class="chat__item-messages">
+															<div class="chat__wrapper-messages">
+																<div class="chat__name">
+																	${message.user_id}
+																</div>
+																<div class="chat__text">
+																	${message.content}
+																</div>
+																<time class="chat__time">
+																	${formatTime} ${todayFormatDate === formatDate ? "" : formatDate}
+																</time>
+																<div class="chat__status">
+																	${message.is_read ? "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" : ""}
+																</div>
+															</div>
+														</li>
+													`)}
+                        ).join('')}
                       </ul>
                     </div>
                   </li>
@@ -379,13 +451,10 @@ class Main extends Block {
             `}
           </div>
           <div class="write">
-          ${this.props.activeChat ? (
-            `
-              <form class="form form--horizontal" onSubmit={{onSubmit}}>
-                <textarea name="message" class="write-message"></textarea>
-                <button class="write__button button">Отправить</button>
-              </form>
-            `) : ""}
+            <form class="${`form form--horizontal${this.props.activeChat ? "" : " display-none"}`}" id="add-message-to-chat">
+              <textarea name="message" class="write-message"></textarea>
+              {{{Button text="Отправить" onClick=onSendMessage}}}
+            </form>
           </div>
         </div>
       </section>
