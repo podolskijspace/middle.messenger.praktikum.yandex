@@ -23,6 +23,15 @@ class UserApi extends BaseAPI {
 			}
 		})
 	}
+
+	editAvatar(formData:unknown) {
+		return HTTP.put(`https://ya-praktikum.tech/api/v2/user/profile/avatar`, {
+			data: formData,
+			headers: {
+				'content-type': 'multipart/form-data',
+			}
+		})
+	}
 }
 
 export const userApi = new UserApi()

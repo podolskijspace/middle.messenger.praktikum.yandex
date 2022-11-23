@@ -8,11 +8,12 @@ type submitPayload = {
   successMessage: string,
   callback?: () => void,
 	notStringify?: boolean,
+	event?: any,
 }
 
-export const onSubmit = async ({query, api, url, successMessage, callback = () => {}, notStringify}:submitPayload) => {
-  const container:HTMLElement = document.querySelector(query) as HTMLElement
-
+export const onSubmit = async ({event, query, api, url, successMessage, callback = () => {}, notStringify}:submitPayload) => {
+	event?.preventDefault();
+	const container:HTMLElement = document.querySelector(query) as HTMLElement
   let result
   if (container) {
     const elemsInputs = [...container.querySelectorAll('input')]

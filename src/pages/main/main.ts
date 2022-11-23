@@ -89,7 +89,7 @@ const contextElems = (onOpenUsersModal, onOpenAddUserToChat, onDeleteChat) => [
   },
 ]
 
-const settingsElems = (onChangePassword, onEditProfile) => [
+const settingsElems = (onChangePassword, onEditProfile, onEditAvatar) => [
 	{
 		title: "Сменить пароль",
 		callback: onChangePassword
@@ -97,6 +97,10 @@ const settingsElems = (onChangePassword, onEditProfile) => [
 	{
 		title: "Редактировать профиль",
 		callback: onEditProfile
+	},
+	{
+		title: "Изменить аватар",
+		callback: onEditAvatar
 	},
 	{
 		title: "Выйти из системы",
@@ -141,10 +145,12 @@ class Main extends Block {
     this.setProps({
 	    contextElems: [],
 	    messages: [],
+	    onChangeUserAvatar: this.onChangeUserAvatar.bind(this),
 	    onDeleteUserFromChat: this.onDeleteUserFromChat.bind(this),
 	    onOpenCreateChatModal: this.onOpenCreateChatModal,
 	    onSendMessage: this.onSendMessage.bind(this),
       onContextMenu: this.onContextMenu.bind(this),
+	    closeModal: this.closeModal.bind(this),
 	    onEditProfile: () => onSubmit({
 		    query: "#modal-edit-profile",
 		    api: (payload) => userApi.editProfile(payload),
@@ -162,14 +168,18 @@ class Main extends Block {
           this.getChats.apply(this)
         },
       }),
-	    onChangePassword: () => onSubmit({
-		    query: "#modal-change-password",
-		    api: (payload) => userApi.changePassword(payload),
-		    successMessage: "Пароль изменен",
-		    callback: () => {
-			    onCloseChangePasswordModal();
-		    },
-	    }),
+	    onChangePassword: (event) => {
+		    onSubmit({
+			    query: "#modal-change-password",
+			    event,
+			    api: (payload) => userApi.changePassword(payload),
+			    successMessage: "Пароль изменен",
+			    callback: () => {
+				    onCloseChangePasswordModal();
+			    },
+		    })
+		    console.log('working');
+	    },
 	    onAddUserToChat: () => onSubmit({
 		    query: "#modal-add-user-to-chat",
 		    api: (payload) => {
@@ -192,6 +202,15 @@ class Main extends Block {
         }),
     })
   }
+
+	async onChangeUserAvatar(event) {
+		const form = event.target.closest('form');
+		const formData = new FormData(form);
+		await userApi.editAvatar(formData)
+		console.log(form)
+		message.success("Аватар изменен");
+		this.closeModal(event);
+	}
 
 	async onDeleteUserFromChat(event):void {
 		const id = event.target.closest('.chat-user-list').dataset.id;
@@ -226,6 +245,11 @@ class Main extends Block {
 		}
 	}
 
+	closeModal(event) {
+		const modal = event.target.closest('.modal');
+		modal.classList.remove('active')
+	}
+
 	onOpenCreateChatModal() {
 		onOpenModal("#modal-create-chat")
 	}
@@ -246,9 +270,15 @@ class Main extends Block {
 	}
 
 	async onOpenEditProfileModal() {
-		this.getUserInfo();
+		await this.getUserInfo();
 		onOpenModal("#modal-edit-profile");
 	}
+
+	async onEditAvatar() {
+		onOpenModal("#modal-edit-avatar");
+	}
+
+
 
 	async onOpenUsersModal() {
 		if (currentChatId) {
@@ -273,6 +303,7 @@ class Main extends Block {
 			contextElems: settingsElems(
 				this.onOpenChangePasswordModal.bind(this),
 				this.onOpenEditProfileModal.bind(this),
+				this.onEditAvatar.bind(this),
 				// this.onDeleteChat.bind(this)
 			)
 		})
@@ -323,10 +354,6 @@ class Main extends Block {
 			  content: '0',
 			  type: 'get old',
 		  }));
-		  // socket.send(JSON.stringify({
-			//   content: 'Моё первое сообщение миру!',
-			//   type: 'message',
-		  // }));
 	  });
 
 	  socket.addEventListener('close', event => {
@@ -368,7 +395,7 @@ class Main extends Block {
 
   render() {
     return `
-    <div> 
+		<main>
       <section class="messenger">
         <div class="messenger__left">
           <div class="messenger__top">
@@ -461,6 +488,7 @@ class Main extends Block {
       
       <div class="modal" id="modal-edit-profile">
         <div class="modal__wrapper modal--settings">
+        	{{{ButtonWithIcon className="modal__close" icon="fa-times" onClick=closeModal}}}
           <form class="form">
             <ul class="form__list">
                 ${settingsList.map(setting => {
@@ -476,13 +504,14 @@ class Main extends Block {
 								})?.join('')}
             </ul>
             <div class="form__buttons">
-              {{{Button text="Добавить пользователя" onClick=onEditProfile}}}
+              {{{Button text="Сохранить" onClick=onEditProfile}}}
             </div> 
           </form>
         </div>
       </div>
       <div class="modal" id="modal-create-chat">
         <div class="modal__wrapper">
+        	{{{ButtonWithIcon className="modal__close" icon="fa-times" onClick=closeModal}}}
           <form class="form">
             <ul class="form__list">
                 <li class="form__item">
@@ -496,8 +525,26 @@ class Main extends Block {
           </form>
         </div>
       </div>
+      
+      <div class="modal" id="modal-edit-avatar">
+        <div class="modal__wrapper modal--settings">
+        	{{{ButtonWithIcon className="modal__close" icon="fa-times" onClick=closeModal}}}
+          <form class="form">
+            <ul class="form__list">
+                <li class="form__item">
+                  <label class="form__label" for="avatar">Выберите новый аватар</label>
+                  <input class="form__input" id="avatar" type="file" name="avatar" accept="image/*">
+                </li>
+            </ul>
+            <div class="form__buttons">
+              {{{Button text="Изменить аватар" onClick=onChangeUserAvatar}}}
+            </div> 
+          </form>
+        </div>
+      </div>
       <div class="modal" id="modal-add-user-to-chat">
         <div class="modal__wrapper modal--settings">
+        	{{{ButtonWithIcon className="modal__close" icon="fa-times" onClick=closeModal}}}
           <form class="form">
             <ul class="form__list">
                 <li class="form__item">
@@ -513,29 +560,32 @@ class Main extends Block {
       </div>
       <div class="modal" id="modal-change-password">
         <div class="modal__wrapper">
-          <form class="form form--settings">
-            <ul class="form__list">
-                <li class="form__item">
-                  <label class="form__label" for="oldPassword">Старый пароль</label>
-                  <input class="form__input" id="oldPassword" type="text" name="oldPassword">
-                </li>
-                <li class="form__item">
-                  <label class="form__label" for="newPassword">Новый пароль</label>
-                  <input class="form__input" id="newPassword" type="text" name="newPassword">
-                </li>
-                <li class="form__item">
-                  <label class="form__label" for="rePassword">Повторите пароль</label>
-                  <input class="form__input" data-not-add="true" id="rePassword" type="text" name="rePassword">
-                </li>
-            </ul>
-            <div class="form__buttons">
-              {{{Button text="Добавить пользователя" onClick=onChangePassword}}}
-            </div> 
-          </form>
+        	{{{ButtonWithIcon className="modal__close" icon="fa-times" onClick=closeModal}}}
+        	{{{Form onSubmit=onChangePassword}}}
+<!--          <form class="form form&#45;&#45;settings">-->
+<!--            <ul class="form__list">-->
+<!--                <li class="form__item">-->
+<!--                  <label class="form__label" for="oldPassword">Старый пароль</label>-->
+<!--                  <input class="form__input" id="oldPassword" type="text" name="oldPassword">-->
+<!--                </li>-->
+<!--                <li class="form__item">-->
+<!--                  <label class="form__label" for="newPassword">Новый пароль</label>-->
+<!--                  <input class="form__input" id="newPassword" type="text" name="newPassword">-->
+<!--                </li>-->
+<!--                <li class="form__item">-->
+<!--                  <label class="form__label" for="rePassword">Повторите пароль</label>-->
+<!--                  <input class="form__input" data-not-add="true" id="rePassword" type="text" name="rePassword">-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--            <div class="form__buttons">-->
+<!--              {{{Button text="Изменить пароль" onClick=onChangePassword}}}-->
+<!--            </div> -->
+<!--          </form>-->
         </div>
       </div>
       <div class="modal" id="modal-users">
         <div class="modal__wrapper">
+        	{{{ButtonWithIcon className="modal__close" icon="fa-times" onClick=closeModal}}}
           <form class="form">
 						<ul>
 							${this.props.chatUsers?.map(user => {
@@ -556,7 +606,7 @@ class Main extends Block {
         </div>
       </div>
       {{{ContextMenu onClick=onContextElemClick elems=contextElems}}}
-    </div>
+    </main>
     `;
   }
 }
