@@ -1,5 +1,6 @@
 import { HTTP } from '../core/HTTP';
 import { BaseAPI } from '../core/BaseApi';
+import {BASE_URL, JSON_DATA_HEADER} from "../constants/main";
 
 // Так можно делать, чтобы использовать базовый путь!!!
 
@@ -7,25 +8,25 @@ import { BaseAPI } from '../core/BaseApi';
 
 class UserApi extends BaseAPI {
 	changePassword(payload:unknown) {
-    return HTTP.put(`https://ya-praktikum.tech/api/v2/user/password`, {
+    return HTTP.put(`${BASE_URL}/user/password`, {
 	    data: payload,
 	    headers: {
-		    'content-type': 'application/json', // Данные отправляем в формате JSON
+		    ...JSON_DATA_HEADER
 	    }
     })
   }
 
 	editProfile(payload:unknown) {
-		return HTTP.put(`https://ya-praktikum.tech/api/v2/user/profile`, {
+		return HTTP.put(`${BASE_URL}/user/profile`, {
 			data: payload,
 			headers: {
-				'content-type': 'application/json', // Данные отправляем в формате JSON
+				...JSON_DATA_HEADER
 			}
 		})
 	}
 
 	editAvatar(formData:unknown) {
-		return HTTP.put(`https://ya-praktikum.tech/api/v2/user/profile/avatar`, {
+		return HTTP.put(`${BASE_URL}/user/profile/avatar`, {
 			data: formData,
 		})
 	}

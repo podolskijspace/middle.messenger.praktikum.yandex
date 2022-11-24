@@ -14,11 +14,16 @@ export class ChatSmallComponent extends Block {
 	}
 
 	protected render(): string {
+		console.log(this.props.avatar)
 		return `
       <li data-id={{id}} class="chat-small ${isUndefinedOrFalse(this.props.active) ? "active" : ""}">
         <div class="chat-small__wrapper">
           <div class="chat-small__avatar">
-            <div class="chat-small__avatar-img"></div>
+            <div class="chat-small__avatar-img">
+            	${isUndefinedOrFalse(this.props.avatar) ? (`
+								<img src="https://ya-praktikum.tech/api/v2/resources${this.props.avatar}">
+							`) : ""}
+						</div>
           </div>
           <div class="chat-small__info">
             <div class="chat-small__name">

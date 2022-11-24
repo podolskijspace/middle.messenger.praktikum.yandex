@@ -1,10 +1,10 @@
 import { HTTP } from '../core/HTTP';
 import { BaseAPI } from '../core/BaseApi';
-
+import {BASE_URL} from "../constants/main";
 
 class MessageApi extends BaseAPI {
 	getToken(chat_id:unknown) {
-    return HTTP.post(`https://ya-praktikum.tech/api/v2/chats/token/${chat_id}`)
+    return HTTP.post(`${BASE_URL}/chats/token/${chat_id}`)
   }
 
 	createWebSocket(USER_ID, CHAT_ID, TOKEN_VALUE) {

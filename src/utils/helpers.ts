@@ -42,6 +42,14 @@ export const onSubmit = async ({event, query, api, url, successMessage, callback
   }
 }
 
+export const checkResultToError = (result) => {
+	if (result?.status === 200) {
+		return result
+	} else {
+		message.error(JSON.parse(result?.responseText)?.reason || "Что-то пошло не так")
+	}
+}
+
 export function isEqual(lhs:unknown, rhs:unknown):boolean {
   return lhs === rhs;
 }
@@ -208,7 +216,7 @@ function cloneDeep(obj: IndexedWIthArray):IndexedWIthArray {
 }
 
 export const isUndefinedOrFalse = (elem:undefined):boolean =>{
-  return !!(elem !== "undefined" && elem !== "false" && elem)
+  return !!(elem !== "undefined" && elem !== "false" && elem && elem !== "null")
 }
 
 export const addZero = (num) => {

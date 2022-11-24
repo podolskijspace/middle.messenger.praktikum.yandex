@@ -1,6 +1,6 @@
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
-import {addZero, onSubmit} from '../../utils/helpers';
+import {addZero, isUndefinedOrFalse, onSubmit, checkResultToError} from '../../utils/helpers';
 import { authApi } from '../../api/AuthApi';
 import { connect } from '../../core/Store';
 import store from "../../core/Store";
@@ -12,9 +12,10 @@ import {isArray} from "util";
 
 const getUserInfo = async () => {
   const result = await authApi.getUserInfo()
-    .then(result => JSON.parse(result.response))
-  // store.set("user", result)
-	return result;
+	if (checkResultToError(result)) {
+		return JSON.parse(result.response);
+		// store.set("user", result)
+	}
 }
 
 const onCreateChat = ():void => {
@@ -206,10 +207,11 @@ class Main extends Block {
 	async onChangeUserAvatar(event) {
 		const form = event.target.closest('form');
 		const formData = new FormData(form);
-		await userApi.editAvatar(formData)
-		console.log(form)
-		message.success("Аватар изменен");
-		this.closeModal(event);
+		const result = await userApi.editAvatar(formData)
+		if (checkResultToError(result)) {
+			message.success("Аватар изменен");
+			this.closeModal(event);
+		}
 	}
 
 	async onDeleteUserFromChat(event):void {
@@ -218,12 +220,12 @@ class Main extends Block {
 			users: [id],
 			chatId: currentChatId
 		})
+		const result = await chatApi.deleteUserFromChat(payload);
+		if (checkResultToError(result)) {
+			this.onOpenUsersModal();
 
-		await chatApi.deleteUserFromChat(payload);
-
-		this.onOpenUsersModal();
-
-		message.success('Пользователь удален')
+			message.success('Пользователь удален')
+		}
 	}
 
 	onSendMessage (event) {
@@ -239,9 +241,11 @@ class Main extends Block {
 
 	async onDeleteChat():void {
 		if (currentChatId) {
-			await chatApi.deleteChat(JSON.stringify({chatId: +currentChatId}))
-			message.success("Чат успешно удален");
-			this.getChats();
+			const result = await chatApi.deleteChat(JSON.stringify({chatId: +currentChatId}));
+			if (checkResultToError(result)) {
+				message.success("Чат успешно удален");
+				this.getChats();
+			}
 		}
 	}
 
@@ -265,13 +269,16 @@ class Main extends Block {
 	async getUserInfo() {
 
 		const result = await getUserInfo();
-
-		this.setProps({userInfo: result})
+		if (checkResultToError(result)) {
+			this.setProps({userInfo: result})
+		}
 	}
 
 	async onOpenEditProfileModal() {
-		await this.getUserInfo();
-		onOpenModal("#modal-edit-profile");
+		const result = await this.getUserInfo();
+		if (checkResultToError(result)) {
+			onOpenModal("#modal-edit-profile");
+		}
 	}
 
 	async onEditAvatar() {
@@ -283,9 +290,11 @@ class Main extends Block {
 	async onOpenUsersModal() {
 		if (currentChatId) {
 			const result = await chatApi.getChatUsers(currentChatId)
-				.then(result => JSON.parse(result.response))
-			this.setProps({chatUsers: result})
-			onOpenModal("#modal-users")
+			if (checkResultToError(result)) {
+				this.setProps({chatUsers: JSON.parse(result.response)})
+				onOpenModal("#modal-users")
+			}
+
 		}
 	}
 
@@ -384,13 +393,14 @@ class Main extends Block {
   }
 
   async getChats () {
-    const result = await chatApi.getChats()
-      .then(result => JSON.parse(result.response))
+    const result = await chatApi.getChats();
+	  if (checkResultToError(result)) {
+		  this.setProps({
+			  chats: JSON.parse(result?.response),
+			  activeChat: false
+		  })
+	  }
 
-    this.setProps({
-      chats: result,
-      activeChat: false
-    })
   }
 
   render() {
@@ -417,6 +427,7 @@ class Main extends Block {
                   last_message="${chat.last_message?.content}"
                   id="${chat.id}"
                   active="${chat.active}"
+                  avatar="${chat.avatar}"
                   onContextMenu=onContextMenu
                 }}}`
             ))?.join('')}
@@ -489,6 +500,11 @@ class Main extends Block {
       <div class="modal" id="modal-edit-profile">
         <div class="modal__wrapper modal--settings">
         	{{{ButtonWithIcon className="modal__close" icon="fa-times" onClick=closeModal}}}
+        	<div class="modal__user-avatar">
+	          ${isUndefinedOrFalse(this.props.userInfo?.avatar) ? (`
+							<img src="https://ya-praktikum.tech/api/v2/resources${this.props.userInfo.avatar}">
+						`) : ""}
+					</div>
           <form class="form">
             <ul class="form__list">
                 ${settingsList.map(setting => {

@@ -1,5 +1,6 @@
 import { HTTP } from '../core/HTTP';
 import { BaseAPI } from '../core/BaseApi';
+import {BASE_URL, JSON_DATA_HEADER} from "../constants/main";
 
 // Так можно делать, чтобы использовать базовый путь!!!
 
@@ -8,29 +9,29 @@ import { BaseAPI } from '../core/BaseApi';
 class AuthApi extends BaseAPI {
   signUp(payload: any) {
       // Здесь уже не нужно писать полный путь /api/v1/chats/
-      return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/signup`, {
+      return HTTP.post(`${BASE_URL}/v2/auth/signup`, {
         data: payload, 
         headers: {
-        'content-type': 'application/json', // Данные отправляем в формате JSON
+          ...JSON_DATA_HEADER
         },
       });
   }
 
   signIn(payload: any) {
-    return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/signin`, {
+    return HTTP.post(`${BASE_URL}/auth/signin`, {
       data: payload, 
       headers: {
-      'content-type': 'application/json', 
+	      ...JSON_DATA_HEADER
       },
     });
   }
 
   logout() {
-    return HTTP.post(`https://ya-praktikum.tech/api/v2/auth/logout`);
+    return HTTP.post(`${BASE_URL}/auth/logout`);
   }
 
   getUserInfo () {
-    return HTTP.get(`https://ya-praktikum.tech/api/v2/auth/user`)
+    return HTTP.get(`${BASE_URL}/auth/user`)
   }
 }
 

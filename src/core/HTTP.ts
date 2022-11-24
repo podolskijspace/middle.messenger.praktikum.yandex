@@ -1,5 +1,3 @@
-import { message } from "../utils/message";
-
 const METHODS = {
   GET: 'GET',
   POST: 'POST',
@@ -14,6 +12,8 @@ if (typeof data !== 'object') {
     throw new Error('Data must be object');
 }
 
+// type HTTPMethod: (url:string, options?:{method:METHODS}) => Promise<unknown>
+
 // Здесь достаточно и [object Object] для объекта
 const keys = Object.keys(data);
 return keys.reduce((result, key, index) => {
@@ -21,7 +21,7 @@ return keys.reduce((result, key, index) => {
 }, '?');
 }
 class HTTPTransport {
-  get = (url, options = {}) => {
+  get:HTTPMethod = (url, options = {}) => {
       return this.request(url, {...options, method: METHODS.GET}, options.timeout);
   };
   post = (url, options = {}) => {
