@@ -4,6 +4,7 @@ import { ValidateRules } from '../../utils/constants';
 import { onSubmit } from '../../utils/helpers';
 import { onLink } from '../../utils/helpers';
 import { authApi } from '../../api/AuthApi';
+import Input from "../../components/input";
 
 export class AuthPage extends Block {
   constructor() {
@@ -18,7 +19,7 @@ export class AuthPage extends Block {
         successMessage: 'Вы успешно авторизованы'
       }),
       onLink: (e):void => onLink(e, '/registry'),
-      pageName:"Авторизацияцуауц"
+      pageName:"Авторизация"
     })
   }
 
