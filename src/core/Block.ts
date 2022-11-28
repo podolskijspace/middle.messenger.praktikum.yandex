@@ -9,6 +9,8 @@ interface BlockMeta<P = any> {
 type Events = Values<typeof Block.EVENTS>;
 
 export default abstract class Block<P = any> {
+	static componentName: string;
+
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',

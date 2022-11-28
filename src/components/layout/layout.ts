@@ -5,6 +5,8 @@ import './layout.css';
 interface LayoutProps {}
 
 export class Layout extends Block<LayoutProps> {
+	static componentName = "Layout";
+
   protected render(): string {
     // language=hbs
     return `

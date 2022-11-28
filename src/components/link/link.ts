@@ -16,6 +16,8 @@ export class Link extends Block {
     this.setProps({className})
   }
 
+	static componentName = "Link";
+
   render() {
     return `<a class="link {{className}}"> {{text}} </a>`
   }

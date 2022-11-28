@@ -13,6 +13,8 @@ export class ButtonWithIcon extends Block {
     super({icon, className, events: {click: onClick}});
   }
 
+	static componentName = "ButtonWithIcon";
+
   protected render(): string {
 		const {className, type} = this.props;
     return `

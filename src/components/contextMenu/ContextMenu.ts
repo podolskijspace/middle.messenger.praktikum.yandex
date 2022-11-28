@@ -12,6 +12,8 @@ export class ContextMenu extends Block {
 		super({icon, elems, events: {click: onClick}});
 	}
 
+	static componentName = "ContextMenu";
+
 	protected render(): string {
 		return `
 	    <div class="context-menu">

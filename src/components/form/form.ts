@@ -12,6 +12,8 @@ export class Form extends Block {
     super({icon, items, className, events: {submit: onSubmit}});
   }
 
+	static componentName = "Form";
+
   protected render(): string {
     return `
     <form class="form form--settings">

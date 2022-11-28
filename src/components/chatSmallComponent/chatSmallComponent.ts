@@ -13,6 +13,8 @@ export class ChatSmallComponent extends Block {
 		super({...props, events: {click: onClick, contextmenu: onContextMenu}});
 	}
 
+	static componentName = "ChatSmallComponent";
+
 	protected render(): string {
 		return `
       <li data-id={{id}} class="chat-small ${isUndefinedOrFalse(this.props.active) ? "active" : ""}">
