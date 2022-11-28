@@ -12,8 +12,9 @@ import {isArray} from "util";
 
 const getUserInfo = async () => {
   const result = await authApi.getUserInfo()
-	if (checkResultToError(result)) {
-		return JSON.parse(result.response);
+	const answer = checkResultToError(result)
+	if (answer) {
+		return answer;
 		// store.set("user", result)
 	}
 }
@@ -272,11 +273,12 @@ class Main extends Block {
 		if (result) {
 			this.setProps({userInfo: result})
 		}
+		return result
 	}
 
 	async onOpenEditProfileModal() {
 		const result = await this.getUserInfo();
-		if (checkResultToError(result)) {
+		if (result) {
 			onOpenModal("#modal-edit-profile");
 		}
 	}
@@ -290,8 +292,9 @@ class Main extends Block {
 	async onOpenUsersModal() {
 		if (currentChatId) {
 			const result = await chatApi.getChatUsers(currentChatId)
-			if (checkResultToError(result)) {
-				this.setProps({chatUsers: JSON.parse(result.response)})
+			const payload = checkResultToError(result)
+			if (payload) {
+				this.setProps({chatUsers: payload})
 				onOpenModal("#modal-users")
 			}
 
@@ -394,9 +397,10 @@ class Main extends Block {
 
   async getChats () {
     const result = await chatApi.getChats();
-	  if (checkResultToError(result)) {
+		const payload = checkResultToError(result);
+	  if (payload) {
 		  this.setProps({
-			  chats: JSON.parse(result?.response),
+			  chats: payload,
 			  activeChat: false
 		  })
 	  }

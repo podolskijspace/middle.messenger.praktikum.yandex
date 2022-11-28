@@ -14,7 +14,6 @@ export class ChatSmallComponent extends Block {
 	}
 
 	protected render(): string {
-		console.log(this.props.avatar)
 		return `
       <li data-id={{id}} class="chat-small ${isUndefinedOrFalse(this.props.active) ? "active" : ""}">
         <div class="chat-small__wrapper">

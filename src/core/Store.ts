@@ -57,10 +57,3 @@ export function connect(Component: typeof Block, mapStateToProps) {
     }
   } 
 } 
-
-
-/* 
-1. Добавить метод set
-2. Добавить методы getState в Store
-3. Функция isEqual // DONE
-*/

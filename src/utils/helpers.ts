@@ -43,8 +43,14 @@ export const onSubmit = async ({event, query, api, url, successMessage, callback
 }
 
 export const checkResultToError = (result) => {
-	console.log(result)
 	if (result?.status === 200) {
+		try {
+			const answer = JSON.parse(result.response);
+
+			return answer;
+		} catch (e) {
+			message.error(e || "Неудача при парсенге")
+		}
 		return result
 	} else {
 		message.error(JSON.parse(result?.responseText)?.reason || "Что-то пошло не так")
