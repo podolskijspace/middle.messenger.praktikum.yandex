@@ -1,3 +1,15 @@
+type payloadType = Document | XMLHttpRequestBodyInit | null | undefined;
+
+type optionsType = {
+	timeout?:number;
+	headers?: Record<string, string>;
+	method?: string;
+	data?: payloadType;
+}
+
+type responseMethod = (url:string, options:optionsType) => void
+
+
 const METHODS = {
   GET: 'GET',
   POST: 'POST',
@@ -6,34 +18,31 @@ const METHODS = {
 };
 // Самая простая версия. Реализовать штучку со всеми проверками им предстоит в конце спринта
 // Необязательный метод
-function queryStringify(data) {
-	console.log(data)
-if (typeof data !== 'object') {
-    throw new Error('Data must be object');
-}
-
-// type HTTPMethod: (url:string, options?:{method:METHODS}) => Promise<unknown>
-
+function queryStringify(data:object) {
+	if (typeof data === 'object') {
+	    throw new Error('Data must be object');
+	}
 // Здесь достаточно и [object Object] для объекта
-const keys = Object.keys(data);
-return keys.reduce((result, key, index) => {
-  return `${result}${key}=${data[key]}${index < keys.length - 1 ? '&' : ''}`;
-}, '?');
+	const keys = Object.keys(data);
+		return keys.reduce((result, key, index) => {
+		  return `${result}${key}=${data[key]}${index < keys.length - 1 ? '&' : ''}`;
+		}, '?');
 }
+
 class HTTPTransport {
-  get:HTTPMethod = (url, options = {}) => {
+  get:responseMethod = (url, options = {}) => {
       return this.request(url, {...options, method: METHODS.GET}, options.timeout);
   };
-  post = (url, options = {}) => {
+  post:responseMethod = (url, options = {}) => {
       return this.request(url, {...options, method: METHODS.POST}, options.timeout);
   };
-  put = (url, options = {}) => {
+  put:responseMethod = (url, options = {}) => {
       return this.request(url, {...options, method: METHODS.PUT}, options.timeout);
   };
-  delete = (url, options = {}) => { 
+  delete:responseMethod = (url, options = {}) => {
       return this.request(url, {...options, method: METHODS.DELETE}, options.timeout);
   };
-  request = (url, options = {}, timeout = 5000) => {
+  request = (url:string, options: optionsType = {}, timeout:number = 5000) => {
     const {headers = {}, method, data} = options;
     return new Promise(function(resolve, reject) {
       if (!method) {
@@ -45,7 +54,7 @@ class HTTPTransport {
       xhr.open(
         method, 
         isGet && !!data
-          ? `${url}${queryStringify(data)}`
+          ? `${url}${queryStringify(data as object)}`
           : url,
       );
       Object.keys(headers).forEach(key => {

@@ -120,10 +120,10 @@ const onOpenModal = (selector):void => {
 
 const deleteContextMenu = (event):void => {
 	if (!event.target.closest('.context-menu') || event.target.closest('.context-menu__item')) {
-	const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
-	contextElem.classList.remove('active');
-	document.body.removeEventListener('click', deleteContextMenu)
-}
+		const contextElem = document.querySelector('.context-menu') as HTMLDivElement;
+		contextElem.classList.remove('active');
+		document.body.removeEventListener('click', deleteContextMenu)
+	}
 }
 
 const onContextMenu = (event) => {
@@ -269,7 +269,7 @@ class Main extends Block {
 	async getUserInfo() {
 
 		const result = await getUserInfo();
-		if (checkResultToError(result)) {
+		if (result) {
 			this.setProps({userInfo: result})
 		}
 	}

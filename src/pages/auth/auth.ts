@@ -18,7 +18,7 @@ export class AuthPage extends Block {
         successMessage: 'Вы успешно авторизованы'
       }),
       onLink: (e):void => onLink(e, '/registry'),
-      pageName:"Авторизация"
+      pageName:"Авторизацияцуауц"
     })
   }
 

@@ -43,6 +43,7 @@ export const onSubmit = async ({event, query, api, url, successMessage, callback
 }
 
 export const checkResultToError = (result) => {
+	console.log(result)
 	if (result?.status === 200) {
 		return result
 	} else {
