@@ -234,3 +234,89 @@ export default cloneDeep;
 
 const objects = [{ 'a': 1 }, { 'b': 2 }];
 const deep = cloneDeep(objects);
+
+const TYPE_ERROR = 'Something wrong with type of input param';
+
+const tree = (lvl: number | string): Nullable<string> => {
+	if (typeof lvl !== "string" && typeof lvl !== "number") {
+		throw new Error(TYPE_ERROR);
+	}
+	if (lvl < 3) {
+		return null
+	}
+	const middle = lvl - 1;
+	const height = middle + 1;
+	const width = middle * 2 - 1;
+	let answer = ""
+	for (let i = 0; i < height; i++) {
+		for(let j = 0; j < width; j++) {
+			if (i === height - 1) {
+				if (j === middle - 1) {
+					answer += "|"
+				} else {
+					answer += " "
+				}
+			} else {
+				const radius = i;
+				if (j+1 >= middle - radius && j+1 <= middle + radius) {
+					answer += "*"
+				} else {
+					answer += " "
+				}
+			}
+		}
+		answer += "\n";
+	}
+
+	return answer
+};
+
+const euclid = (...args: number[]): number => {
+	const maxCount = Math.min(...args)
+	let answer;
+	for (let i = 1; i <= 6006; i++) {
+		if (args.every(item => Number.isInteger(item / i))) {
+			answer = i;
+		}
+	}
+	return answer ? answer : -1;
+}
+
+// function add(val?: number): number | StepFn {
+// 	const num = val || 0;
+// 	return
+// }
+
+type StepFn = (val?: number) => number | StepFn;
+
+function add(a?: number): number | StepFn {
+	if (a) {
+		return function (b?:number) {
+			if (b && a) {
+				return add(b + a);
+			} else {
+				return a || 0;
+			}
+		}
+	} else {
+		return 0;
+	}
+}
+
+// function curry(func) {
+//
+// 	return function curried(...args) {
+// 		if (args.length >= func.length) {
+// 			return func.apply(this, args);
+// 		} else {
+// 			return function(...args2) {
+// 				return curried.apply(this, args.concat(args2));
+// 			}
+// 		}
+// 	};
+//
+// }
+
+// const newAdd = curry(add)
+
+console.log(add(1)(2)())
