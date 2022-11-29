@@ -1,0 +1,10 @@
+.button-with-icon__button {
+  background: var(--message-background);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button-with-icon__button:hover {
+  opacity: 0.8;
+}

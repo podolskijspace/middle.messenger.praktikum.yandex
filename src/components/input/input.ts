@@ -35,6 +35,8 @@ export class Input extends Block {
     this.setProps({value: '', errorMessage})
   }
 
+	static componentName = "Input";
+
   protected render(): string {
     return `
       <div class="input {{class}}">

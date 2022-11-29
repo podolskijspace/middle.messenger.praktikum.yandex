@@ -1,23 +1,24 @@
 import Block from '../../core/Block';
+import { onLink } from '../../utils/helpers';
 
-import './link.css';
+import './link.scss';
 
 interface LinkProps {
   text: string;
+  className: string;
   to: string;
 }
 
 export class Link extends Block {
-  constructor(props: LinkProps) {
-    const onClick = (e: MouseEvent) => {
+  constructor({to, className, ...props}: LinkProps) {
+    super({...props, events: { click: (e: MouseEvent) => onLink(e, to) }});
 
-      e.preventDefault();
-    }
-
-    super({...props, events: { click: onClick }});
+    this.setProps({className})
   }
 
+	static componentName = "Link";
+
   render() {
-    return `<a href="{{to}}">{{text}}</a>`;
+    return `<a class="link {{className}}"> {{text}} </a>`
   }
 }

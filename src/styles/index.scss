@@ -7,8 +7,17 @@
 @import "./components/search";
 @import "./components/chat-info";
 @import "./components/modal";
+@import "./components/tooltip-message";
 @import "./pages/auth";
 @import "./pages/messenger";
 @import "./pages/error-page";
 @import "container";
 @import "reset";
+
+.flex {
+  display: flex;
+}
+
+.display-none {
+  display: none;
+}

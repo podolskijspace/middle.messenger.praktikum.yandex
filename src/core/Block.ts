@@ -9,6 +9,8 @@ interface BlockMeta<P = any> {
 type Events = Values<typeof Block.EVENTS>;
 
 export default abstract class Block<P = any> {
+	static componentName: string;
+
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -91,7 +93,7 @@ export default abstract class Block<P = any> {
       return;
     }
 
-    Object.assign(this.props, nextProps);
+    Object.assign(this.props, nextProps)
   };
 
   setState = (nextState: any) => {
@@ -220,7 +222,7 @@ export default abstract class Block<P = any> {
 
 
   show() {
-    this.getContent().style.display = 'block';
+    this.getContent().style.display = 'flex';
   }
 
   hide() {

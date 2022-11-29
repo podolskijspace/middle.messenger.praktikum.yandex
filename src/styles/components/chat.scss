@@ -15,7 +15,7 @@
 
   &__wrapper-messages {
     position: relative;
-    padding: 5px 80px 5px 25px;
+    padding: 5px 100px 5px 25px;
     width: max-content;
     background: #fff;
     border-radius: 8px;
@@ -41,6 +41,21 @@
   }
 
   &__pick-chat {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__list-messages {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  &__item-messages {
+    &:not(:last-child) {
+      margin-top: 10px;
+    }
   }
 }

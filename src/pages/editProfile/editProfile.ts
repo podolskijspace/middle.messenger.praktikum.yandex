@@ -26,7 +26,7 @@ export class EditProfile extends Block {
                 
               </div>
               `
-            ))}
+            )).join('')}
             <div class="form__buttons">
               {{{Button text="Редактировать"}}}
             </div> 
