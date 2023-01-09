@@ -319,4 +319,135 @@ function add(a?: number): number | StepFn {
 
 // const newAdd = curry(add)
 
-console.log(add(1)(2)())
+
+// Function.prototype.bind = function(ctx: Record<string, unknown>) {
+// 	const callback = this;
+// 	return function () {
+// 		callback.apply(ctx)
+// 	}
+// }
+// var F = function() {
+// 	console.log('foo is', this.foo);
+// }
+// var F1 = F.bind({ foo: 'bar' })
+//
+// F()               // foo is undefined
+// F1()              // foo is bar
+//
+// var f = new F()   // foo is undefined
+// var f1 = new F1() // foo is bar
+//
+// console.log(f instanceof F)    // true
+// console.log(f1 instanceof F)   // false
+
+
+//
+// function newFunc () {
+// 	console.log(this.arg)
+// }
+// //
+// const bindFunc = newFunc.bind({arg: 5})
+// //
+// bindFunc();
+
+// function User(name) {
+// 	this.name = name;
+// 	this.isAdmin = false;
+//
+// 	console.log(this)
+// }
+//
+// console.log(new User())
+
+function omit<T extends object>(obj: T, fields: (keyof T)[]) {
+	const newObj = {...obj};
+	fields.map(key => delete newObj[key])
+	return newObj
+}
+
+//TODO: Авторское решение https://jsfiddle.net/Practicum_mf/obzd9gcm/53/
+function classNames(...args:any[]) {
+	let answer = "";
+
+	args.forEach(arg => {
+		if (arg) {
+			if (answer.length) {
+				answer += " ";
+			}
+			if(isArray(arg)) {
+				if (arg.length) {
+					answer += classNames(...arg)
+				} else {
+					answer = answer.slice(0, answer.length - 1)
+				}
+			} else if (isObject(arg)) {
+				const newArr = Object.keys(arg).filter(item => arg[item])
+				if (newArr.length) {
+					answer += classNames(...newArr)
+				} else {
+					answer = answer.slice(0, answer.length - 1)
+				}
+			} else {
+				answer += arg;
+			}
+		}
+	})
+
+	return answer
+}
+
+
+class ValidationError extends Error {
+	constructor(message:string) {
+		// Need to pass `options` as the second parameter to install the "cause" property.
+		super(message);
+		this.name = "ValidationError";
+		this.stack = `${this.name}: ${this.message}`;
+	}
+}
+
+function isNumber (num:unknown):num is Number {
+	if(!isNaN(num) && parseInt(num) === num && +num === num) {
+		return true
+	}
+	return false
+}
+
+function take<T>(list: T[], num: unknown = 1): T[] {
+	if (isArray(list) && isNumber(num)) {
+		return [...list.slice(0, (num as number))]
+	} else {
+		throw new ValidationError("bad value")
+	}
+}
+
+const testErrCase1 = [123, [1, 2, 3], [1, 2, 3], [1, 2, 3]]
+const testErrCase2 = [1, [1], '1', true]
+
+for (let i = 0; i<4; i++) {
+	try {
+		take(testErrCase1[i], testErrCase2[i])
+	}
+	catch(err) {
+		console.log(err.toString()) // ValidationError: bad value
+	}
+}
+
+
+function unzip(...args:unknown[][]) {
+	let maxLength = 0;
+	args.forEach(arg => {
+		if(!isArray(arg)) {
+			throw new Error(`${arg} is not array`)
+		}
+		maxLength = arg.length > maxLength ? arg.length : maxLength
+	});
+	const answer = [];
+
+	for(let i = 0; i < maxLength; i++) {
+		answer[i] = args.map(arg => arg[i]);
+	}
+
+	return answer;
+}
+
