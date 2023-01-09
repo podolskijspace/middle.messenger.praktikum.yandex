@@ -1,6 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -76,5 +78,11 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: isDev ? "[name].[contenthash].scss" : "[name].scss",
     }),
+    new DuplicatePackageCheckerPlugin()
   ],
+  optimization: {
+    minimizer: [
+      new CssMinimizerPlugin(),
+    ]
+  }
 };

@@ -151,7 +151,7 @@ function isPlainObject(value: unknown): value is PlainObject {
       && Object.prototype.toString.call(value) === '[object Object]';
 }
 
-function isArray(value: unknown): value is [] {
+export function isArray(value: unknown): value is [] {
   return Array.isArray(value);
 }
 
