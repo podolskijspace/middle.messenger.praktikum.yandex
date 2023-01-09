@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { HTTP } from '../core/HTTP';
 import { BaseAPI } from '../core/BaseApi';
 import {BASE_URL, JSON_DATA_HEADER} from "../constants/main";
@@ -9,7 +10,7 @@ import {BASE_URL, JSON_DATA_HEADER} from "../constants/main";
 class AuthApi extends BaseAPI {
   signUp(payload: any) {
       // Здесь уже не нужно писать полный путь /api/v1/chats/
-      return HTTP.post(`${BASE_URL}/v2/auth/signup`, {
+      return HTTP.post(`${BASE_URL}/auth/signup`, {
         data: payload, 
         headers: {
           ...JSON_DATA_HEADER

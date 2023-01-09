@@ -1,6 +1,6 @@
 import Block from '../../core/Block';
 
-import './layout.css';
+import './layout.scss';
 
 interface LayoutProps {}
 

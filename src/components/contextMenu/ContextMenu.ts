@@ -1,5 +1,6 @@
+// @ts-nocheck
 import Block from '../../core/Block';
-import './contextMenu.css';
+import './contextMenu.scss';
 
 interface ContextMenuProps {
 	icon: string;

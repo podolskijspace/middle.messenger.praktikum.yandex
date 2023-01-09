@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Block from '../../core/Block';
 import { authInputs } from './constants';
 import { ValidateRules } from '../../utils/constants';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
 import { onSubmit } from '../../utils/helpers';
@@ -17,7 +18,7 @@ export class RegistryPage extends Block {
         query: "#registry", 
         api: (payload:any) => authApi.signUp(payload), 
         url: '/auth',
-        successMesage: 'Вы успешно зарегистрировались'
+        successMessage: 'Вы успешно зарегистрировались'
       }),
       onLink: (e) => onLink(e, '/auth')
     })

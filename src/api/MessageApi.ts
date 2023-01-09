@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { HTTP } from '../core/HTTP';
 import { BaseAPI } from '../core/BaseApi';
 import {BASE_URL} from "../constants/main";

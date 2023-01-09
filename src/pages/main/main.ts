@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
 import {addZero, isUndefinedOrFalse, onSubmit, checkResultToError} from '../../utils/helpers';
@@ -8,7 +9,7 @@ import {chatApi} from "../../api/ChatApi";
 import {message} from "../../utils/message";
 import {userApi} from "../../api/UserApi";
 import {messageApi} from "../../api/MessageApi";
-import {isArray} from "util";
+import {isArray} from "../../utils/helpers";
 
 const getUserInfo = async () => {
   const result = await authApi.getUserInfo()

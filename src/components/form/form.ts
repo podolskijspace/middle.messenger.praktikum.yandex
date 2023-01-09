@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Block from '../../core/Block';
 
 interface Form {

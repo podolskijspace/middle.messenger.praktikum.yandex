@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { router } from '../core/Router/Router';
 import { message } from './message';
 

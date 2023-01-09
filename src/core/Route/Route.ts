@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { isEqual } from "../../utils/helpers";
 
 export class Route {

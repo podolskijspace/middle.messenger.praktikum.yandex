@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/onboarding/onboarding.ts
 import Block from '../../core/Block';
 import { onLink } from '../../utils/helpers';

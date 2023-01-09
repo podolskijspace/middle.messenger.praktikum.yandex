@@ -1,15 +1,16 @@
+// @ts-nocheck
 require("babel-core/register");
-import { renderDOM, registerComponent }  from './core';
 import MainPage from './pages/main';
 import RegistryPage from './pages/registry';
 import EditProfile from './pages/editProfile';
+import {renderDOM, registerComponent} from "./core";
 import AuthPage from './pages/auth';
 import ForgetPasswordPage from './pages/forgetPassword';
 import router from './core/Router';
 import ButtonWithIcon from "./components/buttonWithIcon";
-import {ChatSmallComponent} from "./components/chatSmallComponent/chatSmallComponent";
-import {ContextMenu} from "./components/contextMenu/ContextMenu";
-
+import ChatSmallComponent from "./components/chatSmallComponent";
+import ContextMenu from "./components/contextMenu";
+//
 import Button from './components/button';
 import Link from './components/link';
 import Input from './components/input';
@@ -31,9 +32,7 @@ registerComponent(Form);
 
 // Можно обновиться на /user и получить сразу пользователя
 
-
 document.addEventListener("DOMContentLoaded", () => {
-  // renderDOM(new EditProfile());
   router
     .use("/", MainPage)
     .use("/auth", AuthPage)

@@ -23,7 +23,7 @@ const onChange = (event:InputEvent, rule:rules, setProps: (p:object)=>void) => {
 
   if (reg) {
     const isValid = value.match(reg)
-    setProps({error: isValid ? 'error' : null, value})
+    setProps({error: isValid ? null : 'error', value})
   }
 }
 

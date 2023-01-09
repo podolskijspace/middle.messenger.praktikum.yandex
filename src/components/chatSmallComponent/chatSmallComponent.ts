@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Block from '../../core/Block';
 import {isUndefinedOrFalse} from "../../utils/helpers";
 

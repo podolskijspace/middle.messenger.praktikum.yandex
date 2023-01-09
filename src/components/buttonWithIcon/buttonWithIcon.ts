@@ -1,6 +1,6 @@
 import Block from '../../core/Block';
 
-import './buttonWithIcon.css';
+import './buttonWithIcon.scss';
 
 interface ButtonProps {
   icon: string;

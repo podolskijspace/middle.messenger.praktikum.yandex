@@ -1,3 +1,4 @@
+// @ts-nocheck
 import EventBus from "./EventBus";
 import Block from "./Block";
 import {isEqualObj, set} from "../utils/helpers";

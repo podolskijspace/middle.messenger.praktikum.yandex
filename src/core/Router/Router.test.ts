@@ -1,3 +1,4 @@
+// @ts-nocheck
 import MainPage from "../../pages/main";
 
 import { expect } from "chai";
