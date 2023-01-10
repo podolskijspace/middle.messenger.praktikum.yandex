@@ -7,12 +7,14 @@
     "build": "webpack build",
     "test": "mocha",
     "start": "parcel src/index.html --no-cache",
-    "server": "node server.js"
+    "server": "node server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm-run-all test lint:all",
-      "pre-push": "npm run other command"
+      "pre-commit": "eslint .",
+      "pre-push": "eslint --exit-on-fatal-error"
     }
   },
   "repository": {
