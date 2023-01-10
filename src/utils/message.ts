@@ -1,68 +1,67 @@
 class Message {
   message: HTMLDivElement | undefined;
 
-  constructor () {
+  constructor() {
     this.initialization();
   }
 
-  success (e: string) {
+  success(e: string) {
     if (this.message) {
-      this.message.classList.add('success')
-      this.message.classList.add('work')
-      
+      this.message.classList.add("success");
+      this.message.classList.add("work");
+
       this.message.textContent = e;
 
-      setTimeout(()=>{
+      setTimeout(() => {
         if (this.message) {
-          this.message.classList.remove('work')
+          this.message.classList.remove("work");
         }
-      }, 3000)
+      }, 3000);
 
-      setTimeout(()=>{
+      setTimeout(() => {
         if (this.message) {
-          this.message.classList.remove('success')
+          this.message.classList.remove("success");
         }
-      }, 4000)
+      }, 4000);
     }
   }
 
-
-  error (e: string) {
+  error(e: string) {
     if (this.message) {
-      this.message.classList.add('error')
-      this.message.classList.add('work')
-      
+      this.message.classList.add("error");
+      this.message.classList.add("work");
+
       this.message.textContent = e;
 
-      setTimeout(()=>{
+      setTimeout(() => {
         if (this.message) {
-          this.message.classList.remove('work')
+          this.message.classList.remove("work");
         }
-      }, 3000)
+      }, 3000);
 
-      setTimeout(()=>{
+      setTimeout(() => {
         if (this.message) {
-          this.message.classList.remove('error')
+          this.message.classList.remove("error");
         }
-      }, 4000)
+      }, 4000);
     }
   }
 
-  initialization () {
+  initialization() {
     const message = this.createMessage();
-  
-    document.body.insertAdjacentElement('beforebegin', message);
+
+    document.body.insertAdjacentElement("beforebegin", message);
 
     this.message = message;
   }
 
-  createMessage ():HTMLDivElement {
-    const message = document.createElement('div');
+  createMessage(): HTMLDivElement {
+    const message = document.createElement("div");
 
-    message.classList.add('tooltip-message');
+    message.classList.add("tooltip-message");
 
     return message;
   }
 }
 
-export const message = new Message()
+export const message = new Message();

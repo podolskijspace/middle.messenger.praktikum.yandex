@@ -1,11 +1,11 @@
-import Block from '../../core/Block';
+import Block from "../../core/Block";
 
-import './layout.scss';
+import "./layout.scss";
 
 interface LayoutProps {}
 
 export class Layout extends Block<LayoutProps> {
-	static componentName = "Layout";
+  static componentName = "Layout";
 
   protected render(): string {
     // language=hbs
@@ -18,6 +18,6 @@ export class Layout extends Block<LayoutProps> {
         </div>
         <div class="screen__content" data-layout=1></div>
       </div>
-    `
+    `;
   }
 }

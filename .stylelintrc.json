@@ -3,8 +3,5 @@
   "rules": {
     "color-hex-case": "lower"
   },
-  "ignoreFiles": [
-    "dist/*",
-    "node_modules"
-  ]
+  "ignoreFiles": ["dist/*", "node_modules"]
 }

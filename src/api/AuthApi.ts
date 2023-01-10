@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { HTTP } from '../core/HTTP';
-import { BaseAPI } from '../core/BaseApi';
-import {BASE_URL, JSON_DATA_HEADER} from "../constants/main";
+import { HTTP } from "../core/HTTP";
+import { BaseAPI } from "../core/BaseApi";
+import { BASE_URL, JSON_DATA_HEADER } from "../constants/main";
 
 // Так можно делать, чтобы использовать базовый путь!!!
 
@@ -9,20 +9,20 @@ import {BASE_URL, JSON_DATA_HEADER} from "../constants/main";
 
 class AuthApi extends BaseAPI {
   signUp(payload: any) {
-      // Здесь уже не нужно писать полный путь /api/v1/chats/
-      return HTTP.post(`${BASE_URL}/auth/signup`, {
-        data: payload, 
-        headers: {
-          ...JSON_DATA_HEADER
-        },
-      });
+    // Здесь уже не нужно писать полный путь /api/v1/chats/
+    return HTTP.post(`${BASE_URL}/auth/signup`, {
+      data: payload,
+      headers: {
+        ...JSON_DATA_HEADER,
+      },
+    });
   }
 
   signIn(payload: any) {
     return HTTP.post(`${BASE_URL}/auth/signin`, {
-      data: payload, 
+      data: payload,
       headers: {
-	      ...JSON_DATA_HEADER
+        ...JSON_DATA_HEADER,
       },
     });
   }
@@ -31,9 +31,9 @@ class AuthApi extends BaseAPI {
     return HTTP.post(`${BASE_URL}/auth/logout`);
   }
 
-  getUserInfo () {
-    return HTTP.get(`${BASE_URL}/auth/user`)
+  getUserInfo() {
+    return HTTP.get(`${BASE_URL}/auth/user`);
   }
 }
 
-export const authApi = new AuthApi()
+export const authApi = new AuthApi();

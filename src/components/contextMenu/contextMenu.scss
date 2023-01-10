@@ -19,10 +19,10 @@
 
 .context-menu__item:hover .context-menu__text {
   cursor: pointer;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .context-menu__text {
   color: #fff;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }

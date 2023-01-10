@@ -1,1 +1,1 @@
-export { ForgetPasswordPage as default } from './forgetPassword';
+export { ForgetPasswordPage as default } from "./forgetPassword";

@@ -1,15 +1,14 @@
-const register = require('@babel/register').default;
-const { JSDOM } = require('jsdom');
+const register = require("@babel/register").default;
+const { JSDOM } = require("jsdom");
 
 register({
-  presets: [
-    '@babel/preset-typescript',
-    '@babel/preset-env',
-  ],
-  extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  presets: ["@babel/preset-typescript", "@babel/preset-env"],
+  extensions: [".ts", ".tsx", ".js", ".jsx"],
 });
 
-const { window } = new JSDOM('<div id="app"></div>', { url: 'https://localhost' });
+const { window } = new JSDOM('<div id="app"></div>', {
+  url: "https://localhost",
+});
 
 global.window = window;
 global.document = window.document;

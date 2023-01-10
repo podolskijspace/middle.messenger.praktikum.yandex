@@ -1,1 +1,1 @@
-export { ChatSmallComponent as default } from './chatSmallComponent';
+export { ChatSmallComponent as default } from "./chatSmallComponent";

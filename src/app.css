@@ -1,6 +1,7 @@
-@import './variables.css';
+@import "./variables.css";
 
-html, body {
+html,
+body {
   height: 100%;
 }
 

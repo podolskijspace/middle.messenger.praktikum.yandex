@@ -1,4 +1,4 @@
-import {rules} from '../utils/constants'
+import { rules } from "../utils/constants";
 
 declare global {
   export type Nullable<T> = T | null;
@@ -7,12 +7,12 @@ declare global {
   export type Values<T extends Record<string, unknown>> = T[Keys<T>];
 
   export interface IInputs {
-    name: string,
-    type: string,
-    text: string,
-    rule?: rules,
-    value?: string
+    name: string;
+    type: string;
+    text: string;
+    rule?: rules;
+    value?: string;
   }
 }
 
-export {}
+export {};

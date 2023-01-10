@@ -1,26 +1,28 @@
-import Block from '../../core/Block';
+import Block from "../../core/Block";
 
-import './buttonWithIcon.scss';
+import "./buttonWithIcon.scss";
 
 interface ButtonProps {
   icon: string;
-	className?: string;
+  className?: string;
   onClick: () => void;
 }
 
 export class ButtonWithIcon extends Block {
-  constructor({icon, onClick, className}: ButtonProps) {
-    super({icon, className, events: {click: onClick}});
+  constructor({ icon, onClick, className }: ButtonProps) {
+    super({ icon, className, events: { click: onClick } });
   }
 
-	static componentName = "ButtonWithIcon";
+  static componentName = "ButtonWithIcon";
 
   protected render(): string {
-		const {className, type} = this.props;
+    const { className, type } = this.props;
     return `
     <div class="button-with-icon ${className ? className : ""}">
-      <button class="button-with-icon__button" type="${type ? type : "button"}"><i class="fa {{icon}}" aria-hidden="true"></i></button>
+      <button class="button-with-icon__button" type="${
+        type ? type : "button"
+      }"><i class="fa {{icon}}" aria-hidden="true"></i></button>
     </div>
-    `
+    `;
   }
 }
