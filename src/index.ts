@@ -38,6 +38,4 @@ document.addEventListener("DOMContentLoaded", () => {
     .use("/forget-password", ForgetPasswordPage)
     .use("/profile", EditProfile)
     .start();
-
-  // setTimeout(()=>{router.go('/')}, 5000)
 });
