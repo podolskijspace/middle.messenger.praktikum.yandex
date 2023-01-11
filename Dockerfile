@@ -1,10 +1,10 @@
 ARG REGISTRY=github.com/podolskijspace/middle.messenger.praktikum.yandex
-ARG IMAGE_BUILD=ubuntu
-ARG TAG_BUILD=18.04
+ARG IMAGE_BUILD=node
+ARG TAG_BUILD=16-alpine
 
 FROM ${IMAGE_BUILD}:${TAG_BUILD}
-RUN apt update && apt install -y nodejs && apt install -y npm && npm install
-WORKDIR /var/www
-COPY ./server.js server.js
+WORKDIR /app
+COPY . .
+RUN npm install && npm run build
 EXPOSE 3000
 CMD node server.js
