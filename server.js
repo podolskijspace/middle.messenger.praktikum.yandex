@@ -1,15 +1,14 @@
-const path = require("path");
-const express = require("express");
+const http = require('http');
 
-const app = express();
-const PORT = 3000;
+const hostname = 'localhost'; // сервер запустим на всех интерфейсах
+const port = 3000;
 
-app.use(express.static(path.join(__dirname, "/dist/")));
-
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/dist/index.html"));
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello World');
 });
 
-app.listen(process.env.PORT || PORT, () => {
-  console.log("app working");
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
 });
