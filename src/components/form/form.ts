@@ -1,18 +1,19 @@
-import Block from '../../core/Block';
+// @ts-nocheck
+import Block from "../../core/Block";
 
 interface Form {
   icon: string;
-	className?: string;
-	onSubmit: () => void;
-	items: [];
+  className?: string;
+  onSubmit: () => void;
+  items: [];
 }
 
 export class Form extends Block {
-  constructor({icon, items, onSubmit, className}: Form) {
-    super({icon, items, className, events: {submit: onSubmit}});
+  constructor({ icon, items, onSubmit, className }: Form) {
+    super({ icon, items, className, events: { submit: onSubmit } });
   }
 
-	static componentName = "Form";
+  static componentName = "Form";
 
   protected render(): string {
     return `
@@ -35,6 +36,6 @@ export class Form extends Block {
 	      {{{Button text="Изменить пароль" type="submit"}}}
 	    </div> 
 	  </form>
-    `
+    `;
   }
 }

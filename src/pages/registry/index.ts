@@ -1,1 +1,1 @@
-export { RegistryPage as default } from './registry';
+export { RegistryPage as default } from "./registry";

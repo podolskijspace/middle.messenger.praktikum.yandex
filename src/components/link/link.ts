@@ -1,7 +1,7 @@
-import Block from '../../core/Block';
-import { onLink } from '../../utils/helpers';
+import Block from "../../core/Block";
+import { onLink } from "../../utils/helpers";
 
-import './link.scss';
+import "./link.scss";
 
 interface LinkProps {
   text: string;
@@ -10,15 +10,15 @@ interface LinkProps {
 }
 
 export class Link extends Block {
-  constructor({to, className, ...props}: LinkProps) {
-    super({...props, events: { click: (e: MouseEvent) => onLink(e, to) }});
+  constructor({ to, className, ...props }: LinkProps) {
+    super({ ...props, events: { click: (e: MouseEvent) => onLink(e, to) } });
 
-    this.setProps({className})
+    this.setProps({ className });
   }
 
-	static componentName = "Link";
+  static componentName = "Link";
 
   render() {
-    return `<a class="link {{className}}"> {{text}} </a>`
+    return `<a class="link {{className}}"> {{text}} </a>`;
   }
 }

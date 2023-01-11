@@ -1,13 +1,13 @@
-export const authInputs:Array<IInputs> = [
+export const authInputs: Array<IInputs> = [
   {
-    name: 'login',
-    type: 'text',
-    text: 'Логин',
-    rule: 'login',
+    name: "login",
+    type: "text",
+    text: "Логин",
+    rule: "login",
   },
   {
-    name: 'password',
-    type: 'password',
-    text: 'Пароль',
+    name: "password",
+    type: "password",
+    text: "Пароль",
   },
-]
+];

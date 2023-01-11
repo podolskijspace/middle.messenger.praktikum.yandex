@@ -1,25 +1,22 @@
+// @ts-nocheck
 // src/pages/onboarding/onboarding.ts
-import Block from '../../core/Block';
-import { onLink } from '../../utils/helpers';
+import Block from "../../core/Block";
+import { onLink } from "../../utils/helpers";
 
 export class ForgetPasswordPage extends Block {
   constructor() {
     super();
 
     this.setProps({
-      onLink: (e):void => onLink(e, '/auth'),
+      onLink: (e): void => onLink(e, "/auth"),
       formMod: "auth__form",
-      formItems: [
-        {name: 'email', text: 'Почта', type: 'email'},
-      ],
-      formButtons: [
-        {href: 'auth', text: 'Восстановить пароль'},
-      ]
-    })
+      formItems: [{ name: "email", text: "Почта", type: "email" }],
+      formButtons: [{ href: "auth", text: "Восстановить пароль" }],
+    });
   }
 
   render() {
-    return`
+    return `
     
     <section class="auth">
       <div class="container">

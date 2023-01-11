@@ -1,26 +1,28 @@
-import Block from '../../core/Block';
+import Block from "../../core/Block";
 
-import './button.css';
+import "./button.scss";
 
 interface ButtonProps {
   text: string;
   onClick: () => void;
-	type?: string;
+  type?: string;
 }
 
 export class Button extends Block {
-  constructor({text, type, onClick}: ButtonProps) {
-    super({text,type, events: {click: onClick}});
+  constructor({ text, type, onClick }: ButtonProps) {
+    super({ text, type, events: { click: onClick } });
   }
 
-	static componentName = "Button";
+  static componentName = "Button";
 
   protected render(): string {
-		const {type} = this.props;
+    const { type } = this.props;
     return `
     <div class="button">
-      <button class="button__button" type="${type ? type : "button"}">{{text}}</button>
+      <button class="button__button" type="${
+        type ? type : "button"
+      }">{{text}}</button>
     </div>
-    `
+    `;
   }
 }
