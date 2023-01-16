@@ -4,7 +4,9 @@ ARG TAG_BUILD=16-alpine
 
 FROM ${IMAGE_BUILD}:${TAG_BUILD}
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
 COPY . .
-RUN npm install && npm run build
+RUN npm build
 EXPOSE 3000
 CMD node server.js
