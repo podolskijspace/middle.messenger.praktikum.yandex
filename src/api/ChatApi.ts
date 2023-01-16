@@ -1,4 +1,4 @@
-import { HTTP } from "../core/HTTP";
+import HTTP from "../core/HTTP";
 import { BaseAPI } from "../core/BaseApi";
 import { BASE_URL, JSON_DATA_HEADER } from "../constants/main";
 

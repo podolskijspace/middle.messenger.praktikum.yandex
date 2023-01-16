@@ -1,5 +1,5 @@
 // @ts-nocheck
-import EventBus from "./EventBus";
+import EventBus from "../EventBus";
 import { nanoid } from "nanoid";
 import Handlebars from "handlebars";
 
@@ -9,7 +9,7 @@ interface BlockMeta<P = any> {
 
 type Events = Values<typeof Block.EVENTS>;
 
-export default abstract class Block<P = any> {
+export abstract class Block<P = any> {
   static componentName: string;
 
   static EVENTS = {

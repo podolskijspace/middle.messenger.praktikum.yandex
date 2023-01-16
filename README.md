@@ -1,6 +1,6 @@
 # messenger
 
-netlify: https://sprint_4--podolskijspacemessenger.netlify.app/auth
+deploy: https://messanger-2dne.onrender.com/
 figma: https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0%3A1
 github: https://github.com/podolskijspace
 mr: https://github.com/podolskijspace/middle.messenger.praktikum.yandex/pull/8
