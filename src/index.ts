@@ -1,5 +1,4 @@
 // @ts-nocheck
-require("babel-core/register");
 import MainPage from "./pages/main";
 import RegistryPage from "./pages/registry";
 import EditProfile from "./pages/editProfile";
