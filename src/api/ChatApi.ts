@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { HTTP } from "../core/HTTP";
 import { BaseAPI } from "../core/BaseApi";
 import { BASE_URL, JSON_DATA_HEADER } from "../constants/main";
@@ -12,7 +11,7 @@ class ChatAPI extends BaseAPI {
     // Здесь уже не нужно писать полный путь /api/v1/chats/
     return HTTP.get(`${BASE_URL}/chats`);
   }
-  createChat(payload: unknown) {
+  createChat(payload: payloadData) {
     // Здесь уже не нужно писать полный путь /api/v1/chats/
     return HTTP.post(`${BASE_URL}/chats`, {
       data: payload,
@@ -22,7 +21,7 @@ class ChatAPI extends BaseAPI {
     });
   }
 
-  deleteChat(payload: unknown) {
+  deleteChat(payload: payloadData) {
     // Здесь уже не нужно писать полный путь /api/v1/chats/
     return HTTP.delete(`${BASE_URL}/chats`, {
       data: payload,
@@ -32,12 +31,12 @@ class ChatAPI extends BaseAPI {
     });
   }
 
-  getChatUsers(chat_id: unknown) {
+  getChatUsers(chat_id: payloadData) {
     // Здесь уже не нужно писать полный путь /api/v1/chats/
     return HTTP.get(`${BASE_URL}/chats/${chat_id}/users`);
   }
 
-  addUserToChat(payload: unknown) {
+  addUserToChat(payload: payloadData) {
     // Здесь уже не нужно писать полный путь /api/v1/chats/
     return HTTP.put(`${BASE_URL}/chats/users`, {
       data: payload,
@@ -47,7 +46,7 @@ class ChatAPI extends BaseAPI {
     });
   }
 
-  deleteUserFromChat(payload: unknown) {
+  deleteUserFromChat(payload: payloadData) {
     // Здесь уже не нужно писать полный путь /api/v1/chats/
     return HTTP.delete(`${BASE_URL}/chats/users`, {
       data: payload,

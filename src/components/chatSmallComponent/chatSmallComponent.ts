@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Block from "../../core/Block";
 import { isUndefinedOrFalse } from "../../utils/helpers";
 
@@ -6,6 +5,7 @@ interface chatSmallProps {
   icon: string;
   onClick: () => void;
   contextmenu: () => void;
+  onContextMenu: () => void;
 }
 
 export class ChatSmallComponent extends Block {

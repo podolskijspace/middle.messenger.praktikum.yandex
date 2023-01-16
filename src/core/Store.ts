@@ -1,4 +1,3 @@
-// @ts-nocheck
 import EventBus from "./EventBus";
 import Block from "./Block";
 import { isEqualObj, set } from "../utils/helpers";
@@ -7,26 +6,33 @@ export enum StoreEvents {
   Updated = "updated",
 }
 
-const initialState = {
+type stateType = {
+  user: Record<string, string>;
+};
+
+const initialState: stateType = {
   user: {},
 };
 
 // наследуем Store от EventBus, чтобы его методы были сразу доступны у экземпляра Store
 class Store extends EventBus {
-  static state;
+  static state: stateType;
 
   constructor() {
     super();
+    // @ts-ignore
     this.state = initialState;
   }
 
   public set(path: string, value: unknown) {
+    // @ts-ignore
     set(this.state, path, value);
     // метод EventBus
     this.emit(StoreEvents.Updated);
   }
 
-  public getState() {
+  public getState(): stateType {
+    // @ts-ignore
     return this.state;
   }
 
@@ -39,10 +45,15 @@ const store = new Store();
 
 export default store;
 
-export function connect(Component: typeof Block, mapStateToProps) {
+type funcMapStateToProps = (state: stateType) => stateType;
+
+export function connect(
+  Component: typeof Block,
+  mapStateToProps: funcMapStateToProps
+) {
   // используем class expression
   return class extends Component {
-    constructor(...props) {
+    constructor(props: payloadData) {
       // не забываем передать все аргументы конструктора
       super({ ...props, ...mapStateToProps(store.getState()) });
 

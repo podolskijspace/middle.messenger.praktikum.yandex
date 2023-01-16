@@ -1,20 +1,19 @@
-// @ts-nocheck
 import { router } from "../core/Router/Router";
 import { message } from "./message";
 
 type submitPayload = {
   query?: string;
-  api: () => any;
+  api: (payload?: unknown) => XMLHttpRequest;
   url: string;
   successMessage: string;
   callback?: () => void;
   notStringify?: boolean;
-  event?: any;
+  event?: SubmitEvent;
 };
 
 export const onSubmit = async ({
   event,
-  query,
+  query = "",
   api,
   url,
   successMessage,
@@ -50,12 +49,10 @@ export const onSubmit = async ({
   }
 };
 
-export const checkResultToError = (result) => {
+export const checkResultToError = (result: XMLHttpRequest) => {
   if (result?.status === 200) {
     try {
-      const answer = JSON.parse(result.response);
-
-      return answer;
+      return JSON.parse(result.response);
     } catch (e) {
       message.error(e || "Неудача при парсенге");
     }
@@ -82,11 +79,7 @@ type Indexed<T = unknown> = {
 };
 
 export const isObject = (value: unknown): boolean => {
-  if (typeof value === "object" && !Array.isArray(value) && value !== null) {
-    return true;
-  } else {
-    return false;
-  }
+  return typeof value === "object" && !Array.isArray(value) && value !== null;
 };
 
 export const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
@@ -118,7 +111,7 @@ export const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
 
 export function set(
   object: Indexed,
-  path: string,
+  path: string | unknown,
   value: unknown
 ): Indexed | unknown {
   if (typeof path !== "string") {
@@ -246,11 +239,11 @@ export const isUndefinedOrFalse = (elem: undefined): boolean => {
   );
 };
 
-export const addZero = (num) => {
-  return num < 10 ? `0${num}` : num;
-};
+// export const addZero = (num) => {
+//   return num < 10 ? `0${num}` : num;
+// };
 
 export default cloneDeep;
 
-const objects = [{ a: 1 }, { b: 2 }];
-const deep = cloneDeep(objects);
+// const objects = [{ a: 1 }, { b: 2 }];
+// const deep = cloneDeep(objects);

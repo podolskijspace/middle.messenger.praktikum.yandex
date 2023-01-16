@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/pages/onboarding/onboarding.ts
 import Block from "../../core/Block";
 import { onSubmit } from "../../utils/helpers";
@@ -14,14 +13,15 @@ export class RegistryPage extends Block {
     this.setProps({
       formMod: "auth__form",
       pageName: "Регистрация",
-      onSubmit: (): any =>
+      onSubmit: (): Promise<void> =>
         onSubmit({
           query: "#registry",
-          api: (payload: any) => authApi.signUp(payload),
+          // @ts-ignore
+          api: (payload) => authApi.signUp(payload as {}),
           url: "/auth",
           successMessage: "Вы успешно зарегистрировались",
         }),
-      onLink: (e) => onLink(e, "/auth"),
+      onLink: (e: MouseEvent) => onLink(e, "/auth"),
     });
   }
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { HTTP } from "../core/HTTP";
 import { BaseAPI } from "../core/BaseApi";
 import { BASE_URL, JSON_DATA_HEADER } from "../constants/main";
@@ -8,7 +7,7 @@ import { BASE_URL, JSON_DATA_HEADER } from "../constants/main";
 // const chatAPIInstance = new HTTP('api/v1/chats');
 
 class UserApi extends BaseAPI {
-  changePassword(payload: unknown) {
+  changePassword(payload: payloadData) {
     return HTTP.put(`${BASE_URL}/user/password`, {
       data: payload,
       headers: {
@@ -17,7 +16,7 @@ class UserApi extends BaseAPI {
     });
   }
 
-  editProfile(payload: unknown) {
+  editProfile(payload: payloadData) {
     return HTTP.put(`${BASE_URL}/user/profile`, {
       data: payload,
       headers: {
@@ -26,7 +25,7 @@ class UserApi extends BaseAPI {
     });
   }
 
-  editAvatar(formData: unknown) {
+  editAvatar(formData: payloadData) {
     return HTTP.put(`${BASE_URL}/user/profile/avatar`, {
       data: formData,
     });

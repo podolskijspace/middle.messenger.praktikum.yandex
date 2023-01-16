@@ -1,13 +1,11 @@
-type payloadType = Document | XMLHttpRequestBodyInit | null | undefined;
-
 type optionsType = {
   timeout?: number;
   headers?: Record<string, string>;
   method?: string;
-  data?: payloadType;
+  data?: payloadData;
 };
 
-type responseMethod = (url: string, options: optionsType) => void;
+type responseMethod = (url: string, options?: optionsType) => Promise<void>;
 
 const METHODS = {
   GET: "GET",
@@ -61,7 +59,7 @@ class HTTPTransport {
     url: string,
     options: optionsType = {},
     timeout: number = 5000
-  ) => {
+  ): Promise<void> => {
     const { headers = {}, method, data } = options;
     return new Promise(function (resolve, reject) {
       if (!method) {
@@ -81,6 +79,7 @@ class HTTPTransport {
       xhr.withCredentials = true;
 
       xhr.onload = function () {
+        // @ts-ignore
         resolve(xhr);
       };
 
@@ -93,6 +92,7 @@ class HTTPTransport {
       if (isGet || !data) {
         xhr.send();
       } else {
+        // @ts-ignore
         xhr.send(data);
       }
       xhr.onreadystatechange = function () {

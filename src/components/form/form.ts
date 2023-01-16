@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Block from "../../core/Block";
 
 interface Form {
@@ -8,7 +7,7 @@ interface Form {
   items: [];
 }
 
-export class Form extends Block {
+export class myForm extends Block {
   constructor({ icon, items, onSubmit, className }: Form) {
     super({ icon, items, className, events: { submit: onSubmit } });
   }

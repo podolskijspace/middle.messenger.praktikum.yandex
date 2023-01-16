@@ -43,7 +43,8 @@ export class Input extends Block {
       type,
       errorMessage,
       events: {
-        change: (event: any) => onChange(event, rest.rule, this.setProps),
+        change: (event: InputEvent) =>
+          onChange(event, rest.rule, this.setProps),
       },
     });
 

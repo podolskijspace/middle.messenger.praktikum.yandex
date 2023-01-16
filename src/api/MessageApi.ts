@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { HTTP } from "../core/HTTP";
 import { BaseAPI } from "../core/BaseApi";
 import { BASE_URL } from "../constants/main";
@@ -8,7 +7,7 @@ class MessageApi extends BaseAPI {
     return HTTP.post(`${BASE_URL}/chats/token/${chat_id}`);
   }
 
-  createWebSocket(USER_ID, CHAT_ID, TOKEN_VALUE) {
+  createWebSocket(USER_ID: string, CHAT_ID: string, TOKEN_VALUE: string) {
     return new WebSocket(
       `wss://ya-praktikum.tech/ws/chats/${USER_ID}/${CHAT_ID}/${TOKEN_VALUE}`
     );

@@ -13,6 +13,8 @@ declare global {
     rule?: rules;
     value?: string;
   }
+
+  export type payloadData = Record<string, string | number>;
 }
 
 export {};
