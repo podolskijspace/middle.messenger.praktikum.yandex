@@ -239,9 +239,9 @@ export const isUndefinedOrFalse = (elem: undefined): boolean => {
   );
 };
 
-// export const addZero = (num) => {
-//   return num < 10 ? `0${num}` : num;
-// };
+export const addZero = (num: string | number) => {
+  return num < 10 ? `0${num}` : num;
+};
 
 export default cloneDeep;
 
